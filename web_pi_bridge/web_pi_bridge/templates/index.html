@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Screen Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+        }
+        .btn-container { display: flex; gap: 20px; }
+        button {
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        button:active { transform: scale(0.95); }
+        .btn-show { background-color: #f1c40f; color: #000; }
+        .btn-hide { background-color: #e74c3c; color: #fff; }
+        #status { margin-top: 24px; font-size: 16px; color: #888; }
+    </style>
+</head>
+<body>
+    <h1>Pi Framebuffer Display Control</h1>
+    <div class="btn-container">
+        <button class="btn-show" onclick="sendDisplayCommand(true)">Display Banana</button>
+        <button class="btn-hide" onclick="sendDisplayCommand(false)">Don't Display Banana</button>
+    </div>
+    <div id="status">Status: Ready</div>
+
+    <script>
+        async function sendDisplayCommand(showState) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerText = "Sending request over ROS 2...";
+            try {
+                const response = await fetch('/api/set_display', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ state: showState })
+                });
+                const data = await response.json();
+                statusDiv.innerText = `Result: ${data.message}`;
+            } catch (err) {
+                statusDiv.innerText = `Error connecting to web bridge`;
+            }
+        }
+    </script>
+</body>
+</html>
