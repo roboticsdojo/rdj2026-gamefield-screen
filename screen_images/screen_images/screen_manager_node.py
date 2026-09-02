@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import time
 from PIL import Image
 
 import rclpy
@@ -133,12 +134,19 @@ def main(args=None):
     rclpy.init(args=args)
     node = ScreenManagerNode()
     try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
+        while rclpy.ok():
+            try:
+                rclpy.spin(node)
+            except KeyboardInterrupt:
+                break
+            except Exception as e:
+                node.get_logger().error(f"spin() raised, retrying: {e}")
+                time.sleep(1.0)
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
+
 
 
 if __name__ == '__main__':
