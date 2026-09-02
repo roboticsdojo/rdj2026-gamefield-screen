@@ -4,6 +4,8 @@ from glob import glob
 
 package_name = 'screen_images'
 
+test_image_dirs = [d for d in glob('test_images/*') if os.path.isdir(d)]
+
 setup(
     name=package_name,
     version='0.0.0',
@@ -11,9 +13,10 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        # Include non-code directories in package share
         (os.path.join('share', package_name, 'logos'), glob('logos/*')),
-        (os.path.join('share', package_name, 'test_images'), glob('test_images/*')),
+    ] + [
+        (os.path.join('share', package_name, 'test_images', os.path.basename(d)), glob(os.path.join(d, '*')))
+        for d in test_image_dirs
     ],
     install_requires=['setuptools'],
     zip_safe=True,
