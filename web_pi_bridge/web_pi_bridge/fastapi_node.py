@@ -19,7 +19,6 @@ class WebBridgeNode(Node):
         # Service client matching screen_manager_node on Pi
         self.cli = self.create_client(SetBool, '/screen_manager_node/set_display')
         self.get_logger().info('WebBridgeNode initialized, waiting for screen manager service...')
-
     async def call_set_display(self, state: bool):
         if not self.cli.wait_for_service(timeout_sec=2.0):
             return False, "Screen manager service unavailable"
@@ -28,11 +27,21 @@ class WebBridgeNode(Node):
         req.data = state
         future = self.cli.call_async(req)
         
-        try:
-            response = await asyncio.wrap_future(future)
-            return response.success, response.message
-        except Exception as e:
-            return False, f"Service execution failed: {e}"
+        # Non-blocking async loop to poll rclpy.task.Future safely
+        timeout_sec = 5.0
+        elapsed = 0.0
+        while not future.done() and elapsed < timeout_sec:
+            await asyncio.sleep(0.05)
+            elapsed += 0.05
+
+        if future.done():
+            try:
+                response = future.result()
+                return response.success, response.message
+            except Exception as e:
+                return False, f"Service execution failed: {e}"
+                
+        return False, "Service request timed out"
 
 
 ros_node = None
@@ -40,7 +49,8 @@ ros_node = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global ros_node
-    rclpy.init()
+    if not rclpy.ok():
+        rclpy.init()
     ros_node = WebBridgeNode()
     
     thread = threading.Thread(target=lambda: rclpy.spin(ros_node), daemon=True)
@@ -49,7 +59,8 @@ async def lifespan(app: FastAPI):
     yield
     
     ros_node.destroy_node()
-    rclpy.shutdown()
+    if rclpy.ok():
+        rclpy.shutdown()
 
 
 app = FastAPI(lifespan=lifespan)
