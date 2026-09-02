@@ -40,6 +40,13 @@
 </head>
 <body>
     <h1>Pi Framebuffer Display Control</h1>
+    <div class="section">
+        <h2>Live screen</h2>
+        <img id="live-stream" src="http://100.76.206.127:8080/stream"
+            style="max-width:90vw;border:2px solid #333;border-radius:8px;"
+            alt="Live screen feed"
+            onerror="this.style.opacity=0.3;" onload="this.style.opacity=1;">
+    </div>
 
     <div class="section">
         <h2>Show random image from category</h2>
