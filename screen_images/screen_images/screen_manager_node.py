@@ -2,7 +2,7 @@ import os
 import numpy as np
 import random
 import time
-from PIL import Image
+from PIL import Image, ImageOps
 
 import rclpy
 from rclpy.node import Node
@@ -73,7 +73,10 @@ class ScreenManagerNode(Node):
             return False
         try:
             img = Image.open(img_path).convert('RGB')
-            img = img.resize((self.width, self.height))
+            
+            # Crop and scale to fill the screen while maintaining aspect ratio
+            img = ImageOps.fit(img, (self.width, self.height), centering=(0.5, 0.5))
+            
             np_img = np.array(img, dtype=np.uint8)
 
             r = (np_img[:, :, 0] >> 3).astype(np.uint16) << 11
