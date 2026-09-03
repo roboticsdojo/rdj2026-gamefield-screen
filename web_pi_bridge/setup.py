@@ -14,6 +14,8 @@ setup(
         ('share/' + package_name, ['package.xml']),
         # Copy HTML templates directly into the installed package share directory
         (os.path.join('share', package_name, 'templates'), glob('web_pi_bridge/templates/*')),
+        # Copy static assets (CSS/JS) into the installed package share directory
+        (os.path.join('share', package_name, 'static'), glob('web_pi_bridge/static/*')),
     ],
     install_requires=['setuptools', 'fastapi', 'uvicorn'],
     zip_safe=True,

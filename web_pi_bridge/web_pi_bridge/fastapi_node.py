@@ -5,6 +5,7 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from ament_index_python.packages import get_package_share_directory
 
@@ -75,10 +76,16 @@ app = FastAPI(lifespan=lifespan)
 try:
     pkg_share = get_package_share_directory('web_pi_bridge')
     TEMPLATE_PATH = os.path.join(pkg_share, 'templates', 'index.html')
+    STATIC_DIR = os.path.join(pkg_share, 'static')
     if not os.path.exists(TEMPLATE_PATH):
         raise FileNotFoundError
 except Exception:
-    TEMPLATE_PATH = os.path.join(Path(__file__).parent.resolve(), 'templates', 'index.html')
+    PKG_ROOT = Path(__file__).parent.resolve()
+    TEMPLATE_PATH = os.path.join(PKG_ROOT, 'templates', 'index.html')
+    STATIC_DIR = os.path.join(PKG_ROOT, 'static')
+
+# Serve CSS/JS assets from /static
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 class DisplayRequest(BaseModel):

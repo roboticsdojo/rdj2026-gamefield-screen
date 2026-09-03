@@ -65,13 +65,7 @@ class ScreenManagerNode(Node):
         self.get_logger().info('ScreenManagerNode initialized and logo displayed.')
 
     def _get_fb_resolution(self):
-        try:
-            with open('/sys/class/graphics/fb0/virtual_size', 'r') as f:
-                w, h = map(int, f.read().strip().split(','))
-                return w, h
-        except Exception as e:
-            self.get_logger().warn(f"Failed to read virtual_size: {e}. Defaulting to 480x320.")
-            return 480, 320
+        return 1024, 600
 
     def _write_to_framebuffer(self, img_path):
         if not os.path.exists(img_path):
