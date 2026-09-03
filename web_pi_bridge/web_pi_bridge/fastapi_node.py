@@ -85,7 +85,8 @@ except Exception:
     STATIC_DIR = os.path.join(PKG_ROOT, 'static')
 
 # Serve CSS/JS assets from /static
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+print(f"STATIC_DIR = {STATIC_DIR}, exists = {os.path.exists(STATIC_DIR)}")
+app.mount("/static", StaticFiles(directory=STATIC_DIR, follow_symlink=True), name="static")
 
 
 class DisplayRequest(BaseModel):
