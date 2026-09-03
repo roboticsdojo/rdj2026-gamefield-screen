@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Screen Control</title>
+    <title>Robotics Dojo Screen Control</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Pi Framebuffer Display Control</h1>
-    <div class="section">
-        <h2>Live screen</h2>
-        <img id="live-stream" src="http://100.76.206.127:8080/stream"
-            alt="Live screen feed"
-            onerror="this.style.opacity=0.3;" onload="this.style.opacity=1;">
-    </div>
+    <header>
+        <h1>ROBOTICS DOJO</h1>
+    </header>
 
-    <div class="section">
-        <h2>Show random image from category</h2>
-        <div class="btn-container">
-            <button class="btn-class" onclick="sendClassCommand('organic')">Organic</button>
-            <button class="btn-class" onclick="sendClassCommand('other')">Other</button>
-            <button class="btn-class" onclick="sendClassCommand('plastic')">Plastic</button>
+    <main>
+        <div class="stream-section">
+            <img id="live-stream" src="http://100.76.206.127:8080/stream" alt="Live screen feed">
         </div>
-    </div>
 
-    <div class="section">
-        <h2>Legacy controls</h2>
-        <div class="btn-container">
-            <button class="btn-show" onclick="sendDisplayCommand(true)">Display Sample</button>
-            <button class="btn-hide" onclick="sendDisplayCommand(false)">Revert to Logo</button>
+        <div class="controls-section">
+            <div class="control-group">
+                <h2>Display Category</h2>
+                <div class="btn-container">
+                    <button class="btn-class" onclick="sendClassCommand('organic')">Organic</button>
+                    <button class="btn-class" onclick="sendClassCommand('other')">Other</button>
+                    <button class="btn-class" onclick="sendClassCommand('plastic')">Plastic</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h2>System Controls</h2>
+                <div class="btn-container">
+                    <button class="btn-show" onclick="sendDisplayCommand(true)">Display Sample</button>
+                    <button class="btn-hide" onclick="sendDisplayCommand(false)">Revert to Logo</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div id="status">Status: Ready</div>
+        <div id="status">Status: Ready</div>
+    </main>
+
+    <footer>
+        <p>Innovation at its finest</p>
+    </footer>
 
     <script src="/static/script.js"></script>
 </body>

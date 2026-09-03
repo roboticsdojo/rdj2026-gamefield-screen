@@ -1,45 +1,146 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Strictly disable all scrollbars */
+    background-color: #121212; /* Deep dark background */
+    color: #E0E0E0;            /* Off-white text */
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER (10% Height) --- */
+header {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1E1E1E; /* Slightly lighter than body */
+    border-bottom: 1px solid #333333;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #FF5722; /* Dojo Orange */
+}
+
+/* --- MAIN CONTENT (85% Height) --- */
+main {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1% 2%;
+}
+
+.stream-section {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1A1A1A; /* Dark stream container */
+    border-radius: 12px;
+    padding: 1%;
+    border: 2px solid #333333;
+}
+
+#live-stream {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Prevents image stretching */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* --- CONTROLS (25% of Main) --- */
+.controls-section {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 1%;
+}
+
+.control-group {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #121212;
-    color: #ffffff;
-    margin: 0;
-    gap: 32px;
-    padding: 24px;
+    gap: 10px;
 }
 
-h1 { margin-bottom: 0; }
+h2 {
+    margin: 0;
+    font-size: 1rem;
+    color: #A0AAB5; /* Soft slate for subheaders */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-h2 { margin: 0; font-size: 16px; color: #aaa; font-weight: normal; }
-
-.section { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-
-.btn-container { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.btn-container {
+    display: flex;
+    gap: 2vw;
+}
 
 button {
-    padding: 16px 28px;
-    font-size: 16px;
-    font-weight: bold;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, filter 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
 button:active { transform: scale(0.95); }
+button:hover { filter: brightness(1.15); }
 
-.btn-show { background-color: #f1c40f; color: #000; }
-.btn-hide { background-color: #e74c3c; color: #fff; }
-.btn-class { background-color: #2ecc71; color: #000; }
+.btn-class { background-color: #2A9D8F; color: #FFFFFF; } 
+.btn-show { background-color: #E9C46A; color: #121212; } 
+.btn-hide { background-color: #E76F51; color: #FFFFFF; } 
 
-#status { margin-top: 8px; font-size: 16px; color: #888; text-align: center; }
+#status {
+    height: 5%;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #88929B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-#live-stream {
-    max-width: 90vw;
-    border: 2px solid #333;
-    border-radius: 8px;
+/* --- FOOTER (5% Height) --- */
+footer {
+    height: 5%;
+    width: 100%;
+    background-color: #0A0A0A;
+    color: #666666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #222222;
+}
+
+footer p {
+    margin: 0;
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
 }
