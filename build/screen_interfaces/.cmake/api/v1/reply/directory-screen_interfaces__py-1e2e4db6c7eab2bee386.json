@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "screen_interfaces__py",
+		"source" : "/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces/screen_interfaces__py"
+	}
+}

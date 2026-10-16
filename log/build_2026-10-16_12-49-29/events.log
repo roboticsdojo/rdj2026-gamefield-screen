@@ -1,0 +1,118 @@
+[0.000000] (-) TimerEvent: {}
+[0.001466] (-) JobUnselected: {'identifier': 'screen_images'}
+[0.002661] (-) JobUnselected: {'identifier': 'web_pi_bridge'}
+[0.002875] (screen_interfaces) JobQueued: {'identifier': 'screen_interfaces', 'dependencies': OrderedDict()}
+[0.002985] (screen_interfaces) JobStarted: {'identifier': 'screen_interfaces'}
+[0.041037] (screen_interfaces) JobProgress: {'identifier': 'screen_interfaces', 'progress': 'cmake'}
+[0.051740] (screen_interfaces) Command: {'cmd': ['/usr/bin/cmake', '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/screen_interfaces', '-DCMAKE_INSTALL_PREFIX=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces'], 'cwd': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces', 'env': OrderedDict({'GZ_SIM_SYSTEM_PLUGIN_PATH': '/opt/ros/jazzy/lib', 'PYTHON_BASIC_REPL': '1', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'GZ_SIM_RESOURCE_PATH': '/opt/ros/jazzy/share', 'USER': 'kitana', 'GZ_CONFIG_PATH': '/opt/ros/jazzy/opt/gz_sim_vendor/share/gz:/opt/ros/jazzy/opt/sdformat_vendor/share/gz:/opt/ros/jazzy/opt/gz_gui_vendor/share/gz:/opt/ros/jazzy/opt/gz_transport_vendor/share/gz:/opt/ros/jazzy/opt/gz_rendering_vendor/share/gz:/opt/ros/jazzy/opt/gz_plugin_vendor/share/gz:/opt/ros/jazzy/opt/gz_fuel_tools_vendor/share/gz:/opt/ros/jazzy/opt/gz_msgs_vendor/share/gz:/opt/ros/jazzy/opt/gz_common_vendor/share/gz', 'GIT_ASKPASS': '/home/kitana/.vscode-server/bin/6d62b1d5dace93a33b3a6d3eca1317bd5e15bcb1/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LIBGL_ALWAYS_SOFTWARE': '1', 'LD_LIBRARY_PATH': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib:/home/kitana/ros2_ws/install/screen_interfaces/lib:/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/opt/gz_sim_vendor/lib:/opt/ros/jazzy/opt/gz_sensors_vendor/lib:/opt/ros/jazzy/opt/gz_physics_vendor/lib:/opt/ros/jazzy/opt/sdformat_vendor/lib:/opt/ros/jazzy/opt/rviz_ogre_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/opt/gz_gui_vendor/lib:/opt/ros/jazzy/opt/gz_transport_vendor/lib:/opt/ros/jazzy/opt/gz_rendering_vendor/lib:/opt/ros/jazzy/opt/gz_plugin_vendor/lib:/opt/ros/jazzy/opt/gz_fuel_tools_vendor/lib:/opt/ros/jazzy/opt/gz_msgs_vendor/lib:/opt/ros/jazzy/opt/gz_common_vendor/lib:/opt/ros/jazzy/opt/gz_math_vendor/lib:/opt/ros/jazzy/opt/gz_utils_vendor/lib:/opt/ros/jazzy/opt/gz_tools_vendor/lib:/opt/ros/jazzy/opt/gz_ogre_next_vendor/lib:/opt/ros/jazzy/opt/gz_dartsim_vendor/lib:/opt/ros/jazzy/opt/gz_cmake_vendor/lib:/opt/ros/jazzy/lib', 'HOME': '/home/kitana', 'OLDPWD': '/home/kitana/ros2_ws/src', 'TERM_PROGRAM_VERSION': '1.142.0', 'VSCODE_IPC_HOOK_CLI': '/run/user/1000/vscode-ipc-f838937d-6a54-45bc-a9f7-da6b09901867.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/kitana/.vscode-server/bin/6d62b1d5dace93a33b3a6d3eca1317bd5e15bcb1/extensions/git/dist/askpass-main.js', 'PS1': '\\[\x1b]633;A\x07\\]\\[\\e]0;\\u@\\h: \\w\\a\\]${debian_chroot:+($debian_chroot)}\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ \\[\x1b]633;B\x07\\]', 'VSCODE_GIT_ASKPASS_NODE': '/home/kitana/.vscode-server/bin/6d62b1d5dace93a33b3a6d3eca1317bd5e15bcb1/node', 'PYDEVD_DISABLE_FILE_VALIDATION': '1', 'BUNDLED_DEBUGPY_PATH': '/home/kitana/.vscode-server/extensions/ms-python.debugpy-2026.6.0-linux-x64/bundled/libs/debugpy', 'VSCODE_PYTHON_AUTOACTIVATE_GUARD': '1', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'WSL_DISTRO_NAME': 'Ubuntu', 'DEBUGINFOD_URLS': 'https://debuginfod.ubuntu.com', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install:/home/kitana/ros2_ws/install', 'ROS_DISTRO': 'jazzy', 'LOGNAME': 'kitana', 'NAME': 'kitscratchy', 'WSL_INTEROP': '/run/WSL/2350_interop', 'PULSE_SERVER': 'unix:/mnt/wslg/PulseServer', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm-256color', 'PATH': '/home/kitana/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/kitana/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/kitana/.vscode-server/bin/6d62b1d5dace93a33b3a6d3eca1317bd5e15bcb1/bin/remote-cli:/home/kitana/.local/bin:/home/kitana/.platformio/penv/bin:/home/kitana/rl_env/bin:/opt/ros/jazzy/opt/gz_msgs_vendor/bin:/opt/ros/jazzy/opt/gz_tools_vendor/bin:/opt/ros/jazzy/opt/gz_ogre_next_vendor/bin:/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/usr/lib/linux-tools/6.18.54.1-microsoft-standard-WSL2/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files/Eclipse Adoptium/jdk-21.0.6.7-hotspot/bin:/mnt/c/ProgramData/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/MATLAB/R2024b/runtime/win64:/mnt/c/Program Files/MATLAB/R2024b/bin:/mnt/c/Program Files/usbipd-win/:/mnt/c/Program Files/Tailscale/:/mnt/c/Program Files/WSL/:/mnt/c/Users/user/AppData/Local/Programs/Python/Python312/Scripts/:/mnt/c/Users/user/AppData/Local/Programs/Python/Python312/:/mnt/c/Users/user/AppData/Local/Programs/Python/Launcher/:/mnt/c/Users/user/AppData/Local/Programs/Python/Python310/Scripts/:/mnt/c/Users/user/AppData/Local/Programs/Python/Python310/:/mnt/c/Users/user/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/user/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/msys64/ucrt64/bin:/mnt/c/Users/user/AppData/Local/Muse Hub/lib:/snap/bin:/home/kitana/.vscode-server/extensions/ms-python.debugpy-2026.6.0-linux-x64/bundled/scripts/noConfigScripts', 'ZENOH_ROUTER_CHECK_ATTEMPTS': '2', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': ':0', 'VSCODE_DEBUGPY_ADAPTER_ENDPOINTS': '/home/kitana/.vscode-server/extensions/ms-python.debugpy-2026.6.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-9b4941867a43b3de.txt', 'LANG': 'C.UTF-8', 'PYTHONSTARTUP': '/home/kitana/.vscode-server/data/User/workspaceStorage/a916a8ae53abd6d142b2d92847c4cb20/ms-python.python/pythonrc.py', 'ZENOH_SESSION_CONFIG_URI': '/home/kitana/zenoh_config.json5', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'PERF_EXEC_PATH': '/usr/lib/linux-tools/6.18.54.1-microsoft-standard-WSL2/libexec/perf-core', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1000/vscode-git-96a4333402.sock', 'TERM_PROGRAM': 'vscode', 'ROS_DOMAIN_ID': '62', 'AMENT_PREFIX_PATH': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:/home/kitana/ros2_ws/install/web_pi_bridge:/home/kitana/ros2_ws/install/screen_interfaces:/opt/ros/jazzy', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'PWD': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces', 'COPILOT_DEBUG_NONCE': 'd13c417a2be4b610e3e3414683e9c079', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib/python3.12/site-packages:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages:/home/kitana/ros2_ws/build/web_pi_bridge:/home/kitana/ros2_ws/install/web_pi_bridge/lib/python3.12/site-packages:/home/kitana/ros2_ws/install/screen_interfaces/lib/python3.12/site-packages:/opt/ros/jazzy/opt/gz_sim_vendor/lib/python:/opt/ros/jazzy/opt/sdformat_vendor/lib/python:/opt/ros/jazzy/opt/gz_transport_vendor/lib/python:/opt/ros/jazzy/opt/gz_msgs_vendor/lib/python:/opt/ros/jazzy/opt/gz_math_vendor/lib/python:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'WSL2_GUI_APPS_ENABLED': '1', 'HOSTTYPE': 'x86_64', 'CMAKE_PREFIX_PATH': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:/home/kitana/ros2_ws/install/screen_interfaces:/opt/ros/jazzy/opt/gz_sim_vendor:/opt/ros/jazzy/opt/gz_sensors_vendor:/opt/ros/jazzy/opt/gz_physics_vendor:/opt/ros/jazzy/opt/sdformat_vendor:/opt/ros/jazzy/opt/gz_gui_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:/opt/ros/jazzy/opt/gz_rendering_vendor:/opt/ros/jazzy/opt/gz_plugin_vendor:/opt/ros/jazzy/opt/gz_fuel_tools_vendor:/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_common_vendor:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_tools_vendor:/opt/ros/jazzy/opt/gz_ogre_next_vendor:/opt/ros/jazzy/opt/gz_dartsim_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge:/home/kitana/ros2_ws/install/web_pi_bridge:/opt/ros/jazzy', 'WSLENV': 'VSCODE_WSL_EXT_LOCATION/up'}), 'shell': False}
+[0.097040] (-) TimerEvent: {}
+[0.197621] (-) TimerEvent: {}
+[0.303293] (-) TimerEvent: {}
+[0.404339] (-) TimerEvent: {}
+[0.505310] (-) TimerEvent: {}
+[0.606114] (-) TimerEvent: {}
+[0.706865] (-) TimerEvent: {}
+[0.749400] (screen_interfaces) StdoutLine: {'line': b'-- The C compiler identification is GNU 13.3.0\n'}
+[0.807209] (-) TimerEvent: {}
+[0.908258] (-) TimerEvent: {}
+[1.009477] (-) TimerEvent: {}
+[1.110096] (-) TimerEvent: {}
+[1.210626] (-) TimerEvent: {}
+[1.311360] (-) TimerEvent: {}
+[1.412238] (-) TimerEvent: {}
+[1.513059] (-) TimerEvent: {}
+[1.613976] (-) TimerEvent: {}
+[1.714521] (-) TimerEvent: {}
+[1.815117] (-) TimerEvent: {}
+[1.915861] (-) TimerEvent: {}
+[1.982544] (screen_interfaces) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 13.3.0\n'}
+[2.016171] (-) TimerEvent: {}
+[2.117054] (-) TimerEvent: {}
+[2.217960] (-) TimerEvent: {}
+[2.318723] (-) TimerEvent: {}
+[2.419358] (-) TimerEvent: {}
+[2.520088] (-) TimerEvent: {}
+[2.620703] (-) TimerEvent: {}
+[2.679285] (screen_interfaces) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[2.721072] (-) TimerEvent: {}
+[2.821651] (-) TimerEvent: {}
+[2.922081] (-) TimerEvent: {}
+[3.022617] (-) TimerEvent: {}
+[3.075852] (screen_interfaces) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[3.091319] (screen_interfaces) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[3.092866] (screen_interfaces) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[3.093933] (screen_interfaces) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[3.122883] (-) TimerEvent: {}
+[3.210084] (screen_interfaces) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[3.223098] (-) TimerEvent: {}
+[3.324037] (-) TimerEvent: {}
+[3.424752] (-) TimerEvent: {}
+[3.525379] (-) TimerEvent: {}
+[3.626080] (-) TimerEvent: {}
+[3.681595] (screen_interfaces) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[3.694012] (screen_interfaces) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[3.695187] (screen_interfaces) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[3.695702] (screen_interfaces) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[3.726292] (-) TimerEvent: {}
+[3.735386] (screen_interfaces) StdoutLine: {'line': b'-- Found ament_cmake: 2.5.6 (/opt/ros/jazzy/share/ament_cmake/cmake)\n'}
+[3.826527] (-) TimerEvent: {}
+[3.927104] (-) TimerEvent: {}
+[4.016386] (screen_interfaces) StdoutLine: {'line': b'-- Found Python3: /home/kitana/.platformio/penv/bin/python3 (found version "3.12.3") found components: Interpreter \n'}
+[4.027489] (-) TimerEvent: {}
+[4.128722] (-) TimerEvent: {}
+[4.229820] (-) TimerEvent: {}
+[4.333093] (-) TimerEvent: {}
+[4.433822] (-) TimerEvent: {}
+[4.453073] (screen_interfaces) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.6.1 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)\n'}
+[4.488617] (screen_interfaces) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[4.533997] (-) TimerEvent: {}
+[4.634500] (-) TimerEvent: {}
+[4.735252] (-) TimerEvent: {}
+[4.836097] (-) TimerEvent: {}
+[4.878622] (screen_interfaces) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[4.936424] (-) TimerEvent: {}
+[5.037418] (-) TimerEvent: {}
+[5.048166] (screen_interfaces) StdoutLine: {'line': b'-- Found rosidl_adapter: 4.6.9 (/opt/ros/jazzy/share/rosidl_adapter/cmake)\n'}
+[5.137656] (-) TimerEvent: {}
+[5.238488] (-) TimerEvent: {}
+[5.340321] (-) TimerEvent: {}
+[5.443151] (-) TimerEvent: {}
+[5.502899] (screen_interfaces) StderrLine: {'line': b'\x1b[31mCMake Error at /opt/ros/jazzy/share/rosidl_adapter/cmake/rosidl_adapt_interfaces.cmake:57 (message):\n'}
+[5.503838] (screen_interfaces) StderrLine: {'line': b'  execute_process(/home/kitana/.platformio/penv/bin/python3 -m rosidl_adapter\n'}
+[5.504286] (screen_interfaces) StderrLine: {'line': b'  --package-name screen_interfaces --arguments-file\n'}
+[5.504506] (screen_interfaces) StderrLine: {'line': b'  /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces/rosidl_adapter__arguments__screen_interfaces.json\n'}
+[5.504661] (screen_interfaces) StderrLine: {'line': b'  --output-dir\n'}
+[5.504734] (screen_interfaces) StderrLine: {'line': b'  /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces/rosidl_adapter/screen_interfaces\n'}
+[5.504802] (screen_interfaces) StderrLine: {'line': b'  --output-file\n'}
+[5.504866] (screen_interfaces) StderrLine: {'line': b'  /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces/rosidl_adapter/screen_interfaces.idls)\n'}
+[5.504968] (screen_interfaces) StderrLine: {'line': b'  returned error code 1:\n'}
+[5.505101] (screen_interfaces) StderrLine: {'line': b'\n'}
+[5.505174] (screen_interfaces) StderrLine: {'line': b'  Traceback (most recent call last):\n'}
+[5.505335] (screen_interfaces) StderrLine: {'line': b'\n'}
+[5.505409] (screen_interfaces) StderrLine: {'line': b'    File "<frozen runpy>", line 198, in _run_module_as_main\n'}
+[5.505475] (screen_interfaces) StderrLine: {'line': b'    File "<frozen runpy>", line 88, in _run_code\n'}
+[5.505538] (screen_interfaces) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__main__.py", line 19, in <module>\n'}
+[5.505602] (screen_interfaces) StderrLine: {'line': b'      sys.exit(main())\n'}
+[5.505666] (screen_interfaces) StderrLine: {'line': b'               ^^^^^^\n'}
+[5.505747] (screen_interfaces) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/main.py", line 53, in main\n'}
+[5.505813] (screen_interfaces) StderrLine: {'line': b'      abs_idl_file = convert_to_idl(\n'}
+[5.505877] (screen_interfaces) StderrLine: {'line': b'                     ^^^^^^^^^^^^^^^\n'}
+[5.505942] (screen_interfaces) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__init__.py", line 23, in convert_to_idl\n'}
+[5.506007] (screen_interfaces) StderrLine: {'line': b'      from rosidl_adapter.srv import convert_srv_to_idl\n'}
+[5.506071] (screen_interfaces) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/srv/__init__.py", line 16, in <module>\n'}
+[5.506135] (screen_interfaces) StderrLine: {'line': b'      from rosidl_adapter.resource import expand_template\n'}
+[5.506199] (screen_interfaces) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/resource/__init__.py", line 19, in <module>\n'}
+[5.506264] (screen_interfaces) StderrLine: {'line': b'      import em\n'}
+[5.506328] (screen_interfaces) StderrLine: {'line': b'\n'}
+[5.506392] (screen_interfaces) StderrLine: {'line': b"  ModuleNotFoundError: No module named 'em'\n"}
+[5.506457] (screen_interfaces) StderrLine: {'line': b'\n'}
+[5.506520] (screen_interfaces) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[5.506584] (screen_interfaces) StderrLine: {'line': b'  /opt/ros/jazzy/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:132 (rosidl_adapt_interfaces)\n'}
+[5.506649] (screen_interfaces) StderrLine: {'line': b'  CMakeLists.txt:7 (rosidl_generate_interfaces)\n'}
+[5.506713] (screen_interfaces) StderrLine: {'line': b'\n'}
+[5.506779] (screen_interfaces) StderrLine: {'line': b'\x1b[0m\n'}
+[5.506844] (screen_interfaces) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[5.522878] (screen_interfaces) CommandEnded: {'returncode': 1}
+[5.543868] (-) TimerEvent: {}
+[5.575547] (screen_interfaces) JobEnded: {'identifier': 'screen_interfaces', 'rc': 1}
+[5.587377] (-) EventReactorShutdown: {}

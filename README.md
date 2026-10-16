@@ -64,13 +64,13 @@ cd ~/ros2_ws
 colcon build --packages-select screen_interfaces && source install/setup.bash
 colcon build --packages-select screen_images --symlink-install && source install/setup.bash
 ros2 run screen_images screen_manager_node
-ros2 run screen_images stream_node   # separate terminal
+
 ```
 
 *** On the Pc ***
 ```
 cd ~/ros2_ws
-colcon build --packages-select screen_interfaces && source install/setup.bash
+colcon build --packages-select screen_interfaces --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
 colcon build --packages-select web_pi_bridge --symlink-install && source install/setup.bash
 ros2 run web_pi_bridge fastapi_node
 ```

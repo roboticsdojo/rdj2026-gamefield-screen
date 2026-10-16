@@ -1,0 +1,6 @@
+{
+  "package_name": "screen_interfaces",
+  "non_idl_tuples": [
+    "/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/screen_interfaces:srv/SetDisplayClass.srv"
+  ]
+}
