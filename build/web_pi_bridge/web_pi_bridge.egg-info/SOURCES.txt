@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+resource/web_pi_bridge
+web_pi_bridge/__init__.py
+web_pi_bridge/fastapi_node.py
+web_pi_bridge.egg-info/PKG-INFO
+web_pi_bridge.egg-info/SOURCES.txt
+web_pi_bridge.egg-info/dependency_links.txt
+web_pi_bridge.egg-info/entry_points.txt
+web_pi_bridge.egg-info/requires.txt
+web_pi_bridge.egg-info/top_level.txt
+web_pi_bridge.egg-info/zip-safe
+web_pi_bridge/static/script.js
+web_pi_bridge/static/style.css
+web_pi_bridge/templates/index.html

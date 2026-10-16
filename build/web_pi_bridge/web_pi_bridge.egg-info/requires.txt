@@ -1,0 +1,6 @@
+fastapi
+setuptools
+uvicorn
+
+[test]
+pytest

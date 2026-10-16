@@ -1,0 +1,2 @@
+[console_scripts]
+fastapi_node = web_pi_bridge.fastapi_node:main

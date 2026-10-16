@@ -1,0 +1,171 @@
+[0.420s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'web_pi_bridge', '--symlink-install']
+[0.420s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['web_pi_bridge'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f607de5e450>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f607df86cc0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f607df86cc0>>)
+[0.492s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.493s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.493s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.493s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.493s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.493s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.493s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen'
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.494s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.626s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.627s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['ignore', 'ignore_ament_install']
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'ignore'
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'ignore_ament_install'
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['colcon_pkg']
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'colcon_pkg'
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['colcon_meta']
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'colcon_meta'
+[0.628s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['ros']
+[0.629s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'ros'
+[0.629s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['cmake', 'python']
+[0.629s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'cmake'
+[0.629s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'python'
+[0.630s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extensions ['python_setup_py']
+[0.630s] Level 1:colcon.colcon_core.package_identification:_identify(cad_design) by extension 'python_setup_py'
+[0.630s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.630s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.630s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['ignore', 'ignore_ament_install']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'ignore'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'ignore_ament_install'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['colcon_pkg']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'colcon_pkg'
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['colcon_meta']
+[0.631s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'colcon_meta'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['ros']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'ros'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['cmake', 'python']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'cmake'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'python'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extensions ['python_setup_py']
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design) by extension 'python_setup_py'
+[0.632s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['ignore', 'ignore_ament_install']
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'ignore'
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'ignore_ament_install'
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['colcon_pkg']
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'colcon_pkg'
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['colcon_meta']
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'colcon_meta'
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['ros']
+[0.633s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'ros'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['cmake', 'python']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'cmake'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'python'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extensions ['python_setup_py']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(jacque_cad_design/CAD_Screen_screenshots) by extension 'python_setup_py'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.634s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extensions ['ignore', 'ignore_ament_install']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extension 'ignore'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extension 'ignore_ament_install'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extensions ['colcon_pkg']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extension 'colcon_pkg'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extensions ['colcon_meta']
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extension 'colcon_meta'
+[0.635s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extensions ['ros']
+[0.636s] Level 1:colcon.colcon_core.package_identification:_identify(screen_images) by extension 'ros'
+[0.652s] DEBUG:colcon.colcon_core.package_identification:Package 'screen_images' with type 'ros.ament_python' and name 'screen_images'
+[0.653s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extension 'ignore'
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extension 'ignore_ament_install'
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extensions ['colcon_pkg']
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extension 'colcon_pkg'
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extensions ['colcon_meta']
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extension 'colcon_meta'
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extensions ['ros']
+[0.654s] Level 1:colcon.colcon_core.package_identification:_identify(screen_interfaces) by extension 'ros'
+[0.657s] DEBUG:colcon.colcon_core.package_identification:Package 'screen_interfaces' with type 'ros.ament_cmake' and name 'screen_interfaces'
+[0.657s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extensions ['ignore', 'ignore_ament_install']
+[0.657s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extension 'ignore'
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extension 'ignore_ament_install'
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extensions ['colcon_pkg']
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extension 'colcon_pkg'
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extensions ['colcon_meta']
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extension 'colcon_meta'
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extensions ['ros']
+[0.658s] Level 1:colcon.colcon_core.package_identification:_identify(web_pi_bridge) by extension 'ros'
+[0.661s] DEBUG:colcon.colcon_core.package_identification:Package 'web_pi_bridge' with type 'ros.ament_python' and name 'web_pi_bridge'
+[0.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.661s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.662s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.662s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.662s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.771s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'screen_interfaces' in 'screen_interfaces'
+[0.771s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'screen_images' in 'screen_images'
+[0.771s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_args' from command line to 'None'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_target' from command line to 'None'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_clean_cache' from command line to 'False'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_clean_first' from command line to 'False'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'cmake_force_configure' from command line to 'False'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'ament_cmake_args' from command line to 'None'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'catkin_cmake_args' from command line to 'None'
+[0.772s] Level 5:colcon.colcon_core.verb:set package 'web_pi_bridge' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.772s] DEBUG:colcon.colcon_core.verb:Building package 'web_pi_bridge' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge', 'merge_install': False, 'path': '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/web_pi_bridge', 'symlink_install': True, 'test_result_base': None}
+[0.772s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.774s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.775s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/web_pi_bridge' with build type 'ament_python'
+[0.775s] Level 1:colcon.colcon_core.shell:create_environment_hook('web_pi_bridge', 'ament_prefix_path')
+[0.780s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.780s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/hook/ament_prefix_path.dsv'
+[0.784s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/hook/ament_prefix_path.sh'
+[0.786s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.213s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/web_pi_bridge'
+[2.214s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[5.823s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools commands: register, dist_info, alias, easy_install, install_headers, init_catalog, rotate, install_data, egg_info, bdist_egg, test, bdist_wheel, bdist_rpm, upload, setopt, build_scripts, build, build_clib, install, bdist, check, upload_docs, sdist, editable_wheel, install_lib, install_egg_info, build_py, compile_catalog, develop, build_ext, update_catalog, saveopts, symlink_data, clean, install_scripts, bdist_dumb, extract_messages
+[7.214s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools 'develop' options: --script-dir, --help, --always-copy, --build-directory, --record, --prefix, --multi-version, --version, --uninstall, --force-installation-into-system-dir, --user, --find-links, --upgrade, --no-deps, --index-url, --optimize, --quiet, --exclude-scripts, --no-user-cfg, --always-unzip, --no-find-links, --allow-hosts, --install-dir, --dry-run, --editable, --verbose, --egg-path, --zip-ok, --site-dirs, --install-layout, --local-snapshots-ok
+[7.234s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge': AMENT_PREFIX_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:${CMAKE_PREFIX_PATH} DEBUGINFOD_URLS=https://debuginfod.ubuntu.com LD_LIBRARY_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib:${LD_LIBRARY_PATH} PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ PYTHONPATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib/python3.12/site-packages:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/build --no-deps symlink_data
+[9.590s] Level 1:colcon.colcon_core.shell:create_environment_hook('web_pi_bridge', 'pythonpath_develop')
+[9.590s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/share/web_pi_bridge/hook/pythonpath_develop.dsv'
+[9.590s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge' returned '0': AMENT_PREFIX_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces:${CMAKE_PREFIX_PATH} DEBUGINFOD_URLS=https://debuginfod.ubuntu.com LD_LIBRARY_PATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib:${LD_LIBRARY_PATH} PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ PYTHONPATH=/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib/python3.12/site-packages:/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/build --no-deps symlink_data
+[9.595s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/share/web_pi_bridge/hook/pythonpath_develop.sh'
+[9.602s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge' for CMake module files
+[9.604s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge' for CMake config files
+[9.605s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib'
+[9.606s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/bin'
+[9.606s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib/pkgconfig/web_pi_bridge.pc'
+[9.607s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/lib/python3.12/site-packages'
+[9.607s] Level 1:colcon.colcon_core.shell:create_environment_hook('web_pi_bridge', 'pythonpath')
+[9.608s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/hook/pythonpath.dsv'
+[9.609s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/hook/pythonpath.sh'
+[9.611s] Level 1:colcon.colcon_core.environment:checking '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/bin'
+[9.611s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(web_pi_bridge)
+[9.612s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/package.dsv'
+[9.613s] INFO:colcon.colcon_core.shell:Creating package script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/package.sh'
+[9.615s] INFO:colcon.colcon_core.shell:Creating package script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/package.bash'
+[9.616s] INFO:colcon.colcon_core.shell:Creating package script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/web_pi_bridge/package.zsh'
+[9.617s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/web_pi_bridge/share/colcon-core/packages/web_pi_bridge)
+[9.623s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[9.624s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[9.624s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[9.625s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[9.787s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[9.787s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[9.788s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[9.788s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[9.792s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[9.794s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[9.794s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/local_setup.sh'
+[9.796s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/_local_setup_util_sh.py'
+[9.800s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/setup.sh'
+[9.804s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/local_setup.bash'
+[9.806s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/setup.bash'
+[9.809s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/local_setup.zsh'
+[9.811s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/setup.zsh'

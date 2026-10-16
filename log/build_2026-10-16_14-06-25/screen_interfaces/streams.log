@@ -1,0 +1,162 @@
+[0.100s] Invoking command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kitana/ros2_ws/install/web_pi_bridge:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --build /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces -- -j8 -l8
+[0.747s] [  2%] Built target screen_interfaces__rs
+[0.769s] [  5%] Built target screen_interfaces__rosidl_generator_type_description
+[0.830s] [  5%] Built target ament_cmake_python_copy_screen_interfaces
+[0.839s] [  8%] Built target screen_interfaces__cpp
+[0.892s] [ 22%] Built target screen_interfaces__rosidl_generator_c
+[0.995s] [ 31%] Built target screen_interfaces__rosidl_typesupport_introspection_c
+[0.995s] [ 40%] Built target screen_interfaces__rosidl_typesupport_c
+[1.000s] [ 48%] Built target screen_interfaces__rosidl_typesupport_fastrtps_cpp
+[1.018s] [ 57%] Built target screen_interfaces__rosidl_typesupport_introspection_cpp
+[1.020s] [ 65%] Built target screen_interfaces__rosidl_typesupport_fastrtps_c
+[1.027s] [ 74%] Built target screen_interfaces__rosidl_typesupport_cpp
+[1.086s] [ 74%] Built target screen_interfaces
+[1.170s] [ 77%] Built target screen_interfaces__py
+[1.252s] [ 82%] Built target screen_interfaces__rosidl_generator_py
+[1.334s] [ 88%] Built target screen_interfaces_s__rosidl_typesupport_c
+[1.363s] [ 94%] Built target screen_interfaces_s__rosidl_typesupport_introspection_c
+[1.376s] [100%] Built target screen_interfaces_s__rosidl_typesupport_fastrtps_c
+[2.020s] running egg_info
+[2.098s] writing screen_interfaces.egg-info/PKG-INFO
+[2.101s] writing dependency_links to screen_interfaces.egg-info/dependency_links.txt
+[2.102s] writing top-level names to screen_interfaces.egg-info/top_level.txt
+[2.238s] reading manifest file 'screen_interfaces.egg-info/SOURCES.txt'
+[2.242s] writing manifest file 'screen_interfaces.egg-info/SOURCES.txt'
+[2.384s] [100%] Built target ament_cmake_python_build_screen_interfaces_egg
+[2.423s] Invoked command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kitana/ros2_ws/install/web_pi_bridge:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --build /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces -- -j8 -l8
+[2.467s] Invoking command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kitana/ros2_ws/install/web_pi_bridge:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --install /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces
+[2.543s] -- Install configuration: ""
+[2.556s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/ament_index/resource_index/rosidl_interfaces/screen_interfaces
+[2.557s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/srv/SetDisplayClass.json
+[2.559s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.560s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg
+[2.560s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg/rosidl_generator_c__visibility_control.h
+[2.561s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.561s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/set_display_class.h
+[2.561s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.562s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__type_support.c
+[2.564s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__type_support.h
+[2.564s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__functions.c
+[2.565s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__struct.h
+[2.565s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__description.c
+[2.566s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__functions.h
+[2.567s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/library_path.sh
+[2.569s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/library_path.dsv
+[2.581s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_generator_c.so
+[2.584s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.585s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg
+[2.586s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[2.586s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.588s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.588s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__rosidl_typesupport_fastrtps_c.h
+[2.595s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_fastrtps_c.so
+[2.595s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.596s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg
+[2.596s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[2.597s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.597s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.598s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__type_support.c
+[2.600s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__rosidl_typesupport_introspection_c.h
+[2.605s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_introspection_c.so
+[2.605s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_c.so
+[2.605s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.606s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg
+[2.606s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+[2.606s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.607s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.609s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__struct.hpp
+[2.610s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__type_support.hpp
+[2.616s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__traits.hpp
+[2.616s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__builder.hpp
+[2.616s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/set_display_class.hpp
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/dds_fastrtps
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__rosidl_typesupport_fastrtps_cpp.hpp
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[2.617s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces
+[2.618s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv
+[2.618s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail
+[2.618s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__type_support.cpp
+[2.618s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/include/screen_interfaces/screen_interfaces/srv/detail/set_display_class__rosidl_typesupport_introspection_cpp.hpp
+[2.618s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_introspection_cpp.so
+[2.620s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_typesupport_cpp.so
+[2.620s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/pythonpath.sh
+[2.621s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/pythonpath.dsv
+[2.622s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces-0.0.0-py3.12.egg-info
+[2.622s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces-0.0.0-py3.12.egg-info/top_level.txt
+[2.624s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces-0.0.0-py3.12.egg-info/SOURCES.txt
+[2.624s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces-0.0.0-py3.12.egg-info/PKG-INFO
+[2.626s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces-0.0.0-py3.12.egg-info/dependency_links.txt
+[2.627s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces
+[2.634s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_c.so
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_introspection_c.so
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/__init__.py
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_fastrtps_c.so
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/_screen_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/_screen_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/_screen_interfaces_s.ep.rosidl_typesupport_c.c
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/srv
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/srv/_set_display_class.py
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/srv/__init__.py
+[2.635s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/srv/_set_display_class_s.c
+[2.717s] Listing '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces'...
+[2.718s] Listing '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/srv'...
+[2.736s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_fastrtps_c.so
+[2.743s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_introspection_c.so
+[2.743s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/python3.12/site-packages/screen_interfaces/screen_interfaces_s__rosidl_typesupport_c.so
+[2.745s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/lib/libscreen_interfaces__rosidl_generator_py.so
+[2.745s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust
+[2.745s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/Cargo.toml
+[2.746s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/build.rs
+[2.746s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/src
+[2.747s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/src/lib.rs
+[2.747s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/src/srv.rs
+[2.750s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/src/srv
+[2.751s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/rust/src/srv/rmw.rs
+[2.751s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/srv/SetDisplayClass.idl
+[2.753s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/srv/SetDisplayClass.srv
+[2.753s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/ament_index/resource_index/package_run_dependencies/screen_interfaces
+[2.753s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/ament_index/resource_index/parent_prefix_path/screen_interfaces
+[2.753s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/ament_prefix_path.sh
+[2.755s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/ament_prefix_path.dsv
+[2.755s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/path.sh
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/environment/path.dsv
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/local_setup.bash
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/local_setup.sh
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/local_setup.zsh
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/local_setup.dsv
+[2.756s] -- Installing: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/package.dsv
+[2.756s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/ament_index/resource_index/packages/screen_interfaces
+[2.763s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_generator_cExport.cmake
+[2.763s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_generator_cExport-noconfig.cmake
+[2.763s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+[2.766s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[2.770s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_introspection_cExport.cmake
+[2.770s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[2.771s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_cExport.cmake
+[2.771s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+[2.773s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_generator_cppExport.cmake
+[2.778s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+[2.778s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[2.779s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+[2.779s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[2.779s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_cppExport.cmake
+[2.779s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+[2.781s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_generator_pyExport.cmake
+[2.783s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/export_screen_interfaces__rosidl_generator_pyExport-noconfig.cmake
+[2.783s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/rosidl_cmake-extras.cmake
+[2.783s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+[2.784s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+[2.784s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+[2.784s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+[2.784s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[2.787s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[2.787s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/rosidl_cmake_aggregate_target-extras.cmake
+[2.787s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfacesConfig.cmake
+[2.787s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/cmake/screen_interfacesConfig-version.cmake
+[2.787s] -- Up-to-date: /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/install/screen_interfaces/share/screen_interfaces/package.xml
+[2.798s] Invoked command in '/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/kitana/ros2_ws/install/web_pi_bridge:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --install /home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/screen_interfaces

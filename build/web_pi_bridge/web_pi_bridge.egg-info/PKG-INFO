@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: web-pi-bridge
+Version: 0.0.0
+Summary: Communication between website and pi
+Maintainer: Amy Kibara
+Maintainer-email: amy.kibara@gmail.com
+License: Apache-2.0
+Provides-Extra: test
