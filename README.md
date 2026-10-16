@@ -56,3 +56,21 @@ The three ROS 2 packages live together in one workspace `src/` on both
 machines; each is built and run independently depending on which machine
 it's on (`screen_images` on the Pi, `web_pi_bridge` on the laptop,
 `screen_interfaces` on both).
+
+# Launching
+*** On the Pi ***
+```
+cd ~/ros2_ws
+colcon build --packages-select screen_interfaces && source install/setup.bash
+colcon build --packages-select screen_images --symlink-install && source install/setup.bash
+ros2 run screen_images screen_manager_node
+ros2 run screen_images stream_node   # separate terminal
+```
+
+*** On the Pc ***
+```
+cd ~/ros2_ws
+colcon build --packages-select screen_interfaces && source install/setup.bash
+colcon build --packages-select web_pi_bridge --symlink-install && source install/setup.bash
+ros2 run web_pi_bridge fastapi_node
+```
