@@ -191,3 +191,54 @@ and `static/style.css` (judges' panel + team page, the team page is the `#view-t
 download it with `curl` and it must run without this workspace). Pure Python 3 / FastAPI,
 no new dependencies.
 
+
+## Run-flow page (redesign)
+
+The page is now one judging workflow with a collapsible sidebar, a run timer in the
+top bar (3:00 limit, turns brown when exceeded) and a small light/dark toggle (light
+is the default; palette `#001524 #15616d #ffecd1 #ff7d00 #78290f`). Sections, in run order:
+
+| # | Section | What happens |
+|---|---------|--------------|
+| – | Home (`/#home`) | Logo, team dropdown, Start, run progress, scoreboard (best run per team) |
+| 1 | Gamefield Screen | Show Organic/Metal/Plastic on the Pi screen, robot's detected image + live camera, auto "correctly identified" tick, Waste Detection marks /15 |
+| 2 | Loading Station | Dispenser panel; the station matching the screen class is highlighted; event log; a dispensed piece (from the page *or* the robot) records the load time and prompts the next step; Loading marks /10 |
+| 3 | Dynamic Obstacles | 3-of-6 randomiser (optional auto reshuffle), Obstacles marks /15 |
+| 4 | Navigation Judging | Terrain /15, gate randomiser + Route decision /10, Depositing /15, Stopping /2; "Stop timer" |
+| 5 | Map & Final Score | Map request panel, Mapping /10, Finish time /3, penalties, score sheet, Finalise |
+
+Toasts prompt the next section at each step (Start → screen, detection → loading,
+loaded → obstacles, timer stopped → map). Marks follow the 2026 rules (task subtotal
+90 + finish 3 + stopping 2). The run being scored is kept in the browser
+(`localStorage`), so a refresh mid-run loses nothing; *Finalise* posts it to the server.
+Which waste class each station holds is set on the station cards (saved per browser).
+
+Logos are served from the `screen_images` package at `/logos/<name>`.
+
+### Competition API (section 4 of `fastapi_node.py`)
+
+Stored in `<DOJO_MAP_DIR>/competition.json` (default `~/dojo_maps`).
+
+| Method | Path | Does |
+|--------|------|------|
+| GET    | `/api/competition` | `{teams, runs, current}` |
+| POST   | `/api/competition/teams` | `{name}` adds a team |
+| DELETE | `/api/competition/teams/{name}` | removes a team (its runs stay) |
+| POST   | `/api/competition/current` | `{team, running, elapsed_ms, section}` who is playing |
+| POST   | `/api/competition/runs` | `{team, elapsed_ms, total, scores, displayed, detected, notes}` finished run |
+| DELETE | `/api/competition/runs/{id}` | deletes a run |
+
+### Robot detection image + live camera
+
+Carried by the map exchange so teams need nothing new:
+
+- *Request detection* on the screen section creates a request with `format: "detection"`.
+  `dojo_map.py --watch` answers it with the frame the robot classified and its label
+  (`POST /api/maps/upload?kind=detection&label=plastic&confidence=0.93`). A detector can
+  also push one unrequested: `dojo_map.py ... --push detection --label plastic`.
+- `dojo_map.py --stream` serves the Pi Camera Module 3 as MJPEG on port 8081 and
+  registers the URL (`POST /api/maps/stream {team, url}`); the URL is listed under
+  `streams` in `/api/maps/status` and shown in the *Live camera* tab.
+
+`static/dojo_map.py` is a copy of the robot repo's `auracle_bringup/scripts/dojo_map.py`
+(teams download it with `curl .../static/dojo_map.py`); keep the two in sync.

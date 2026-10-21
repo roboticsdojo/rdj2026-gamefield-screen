@@ -4,7 +4,9 @@ Sections
   1. Screen bridge      ROS node + /api/set_display*  (Pi screen_manager_node)
   2. Dispenser bridge   ROS node + /api/dispenser/*   (loading station)
   3. Map exchange       /api/maps/*  (judges <-> competing teams, pure FastAPI, no ROS)
-  4. App                lifespan, routers, static files, pages, main()
+                        also carries the robot's detection image and live-stream URL
+  4. Competition        /api/competition/*  (teams, finished runs = scoreboard, current run)
+  5. App                lifespan, routers, static files, logos, pages, main()
 
 --------------------------------------------------------------------------
 Dispenser ROS interface (all under /gamefield/loading_station):
@@ -21,12 +23,16 @@ Map exchange flow
   4. The judges' page picks it up while polling             -> GET  /api/maps/status
      PGM files are converted to PNG for display (browsers can't show PGM); the
      original is kept and downloadable.
+  Detection images use the same flow with format "detection": the robot uploads the
+  frame it classified plus ?kind=detection&label=plastic&confidence=0.93.
+  Live stream: the robot registers its MJPEG URL     -> POST /api/maps/stream
 
 Environment
-  DOJO_MAP_DIR  where received files are stored (default ~/dojo_maps)
+  DOJO_MAP_DIR  where received files and competition.json are stored (default ~/dojo_maps)
   DOJO_TOKEN    if set, teams must send it as header X-Dojo-Token to upload
 """
 import asyncio
+import json
 import os
 import re
 import struct
@@ -334,7 +340,8 @@ PNG_MAGIC = b'\x89PNG\r\n\x1a\n'
 maps_router = APIRouter(prefix='/api/maps', tags=['maps'])
 
 _requests = []   # oldest first
-_maps = []       # oldest first
+_maps = []       # oldest first (maps, screenshots and detection images)
+_streams = {}    # team (lower case) -> {'team', 'url', 'time'}
 
 
 def map_dir() -> Path:
@@ -440,6 +447,8 @@ def _public_request(r):
 def _public_map(m):
     return {k: m[k] for k in ('id', 'team', 'kind', 'width', 'height', 'resolution',
                               'origin_x', 'origin_y', 'request_id', 'time', 'size', 'ext')} | {
+        'label': m.get('label', ''),
+        'confidence': m.get('confidence'),
         'display_url': f"/api/maps/file/{m['id']}",
         'original_url': f"/api/maps/file/{m['id']}/original",
     }
@@ -447,7 +456,7 @@ def _public_map(m):
 
 # ------------------------------------------------------------------ judge side
 class NewRequest(BaseModel):
-    format: Literal['pgm', 'screenshot', 'any'] = 'any'
+    format: Literal['pgm', 'screenshot', 'any', 'detection'] = 'any'
     team: str = ''
 
 
@@ -458,6 +467,7 @@ async def maps_status():
         'token_required': bool(os.environ.get('DOJO_TOKEN')),
         'requests': [_public_request(r) for r in reversed(_requests[-15:])],
         'maps': [_public_map(m) for m in reversed(_maps[-30:])],
+        'streams': list(_streams.values()),
     }
 
 
@@ -468,7 +478,8 @@ async def create_request(req: NewRequest):
          'answered_by': '', 'message': ''}
     _requests.append(r)
     del _requests[:-KEEP]
-    return {'success': True, 'message': f"Requested {req.format} map"
+    what = 'detection image' if req.format == 'detection' else f'{req.format} map'
+    return {'success': True, 'message': f"Requested {what}"
             + (f" from {r['team']}" if r['team'] else ' from any team'), 'id': r['id']}
 
 
@@ -519,7 +530,8 @@ async def pending(team: str = '', x_dojo_token: str = Header(default='')):
 @maps_router.post('/upload')
 async def upload(request: Request, team: str = '', request_id: str = '', filename: str = '',
                  resolution: Optional[float] = None, origin_x: Optional[float] = None,
-                 origin_y: Optional[float] = None, x_dojo_token: str = Header(default='')):
+                 origin_y: Optional[float] = None, kind: str = '', label: str = '',
+                 confidence: Optional[float] = None, x_dojo_token: str = Header(default='')):
     _check_token(x_dojo_token)
     _expire()
     if int(request.headers.get('content-length') or 0) > MAX_BYTES:
@@ -531,6 +543,7 @@ async def upload(request: Request, team: str = '', request_id: str = '', filenam
     sniffed = sniff(body)
     if sniffed is None:
         raise HTTPException(422, 'Unsupported file: send a .pgm, .png or .jpg')
+    asked_kind = kind
     kind, ext = sniffed
     team = _clean_team(team) or 'unknown'
 
@@ -539,8 +552,18 @@ async def upload(request: Request, team: str = '', request_id: str = '', filenam
         req = _find_request(request_id)
         if req is None or req['status'] != 'pending':
             raise HTTPException(409, f'Request {request_id} is not pending (answered, cancelled or expired)')
+
+    # a detection is the camera frame the robot classified; it's a png/jpg with a label
+    if asked_kind == 'detection' or (req and req['format'] == 'detection'):
+        if kind != 'screenshot':
+            raise HTTPException(422, 'A detection must be a .png or .jpg image')
+        kind = 'detection'
+
+    if req:
         if req['format'] != 'any' and req['format'] != kind:
             raise HTTPException(422, f"Request {request_id} wants a {req['format']}, but this file is a {kind}")
+        if req['format'] == 'any' and kind == 'detection':
+            raise HTTPException(422, f'Request {request_id} wants a map, not a detection image')
         if req['team'] and req['team'].lower() != team.lower():
             raise HTTPException(403, f"Request {request_id} is addressed to team {req['team']}")
 
@@ -571,12 +594,36 @@ async def upload(request: Request, team: str = '', request_id: str = '', filenam
                   'height': height, 'resolution': resolution, 'origin_x': origin_x,
                   'origin_y': origin_y, 'request_id': req['id'] if req else None,
                   'time': time.time(), 'size': len(body), 'file': f'{stem}.{ext}',
-                  'display_file': f'{stem}_view.{display_ext}' if display_ext != ext else f'{stem}.{ext}'})
+                  'display_file': f'{stem}_view.{display_ext}' if display_ext != ext else f'{stem}.{ext}',
+                  'label': re.sub(r'[^a-z]', '', label.lower())[:16] if kind == 'detection' else '',
+                  'confidence': confidence if kind == 'detection' else None})
     del _maps[:-KEEP]
     if req:
         req.update(status='fulfilled', map_id=mid, answered_by=team)
     return {'success': True, 'map_id': mid,
             'message': f'Received {kind} from {team}' + (f' for request {req["id"]}' if req else ' (unrequested)')}
+
+
+class StreamInfo(BaseModel):
+    team: str = ''
+    url: str = ''     # blank = remove
+
+
+@maps_router.post('/stream')
+async def register_stream(s: StreamInfo, x_dojo_token: str = Header(default='')):
+    """The robot tells the judges where its camera's MJPEG stream lives."""
+    _check_token(x_dojo_token)
+    team = _clean_team(s.team)
+    if not team:
+        raise HTTPException(422, 'team is required')
+    url = s.url.strip()
+    if not url:
+        _streams.pop(team.lower(), None)
+        return {'success': True, 'message': f'Stream for {team} removed'}
+    if len(url) > 300 or not re.fullmatch(r'https?://[^\s"\'<>]+', url):
+        raise HTTPException(422, 'url must look like http://<robot-ip>:8081/stream')
+    _streams[team.lower()] = {'team': team, 'url': url, 'time': time.time()}
+    return {'success': True, 'message': f'Stream for {team} registered'}
 
 
 class Failure(BaseModel):
@@ -595,7 +642,127 @@ async def fail_request(rid: str, f: Failure, x_dojo_token: str = Header(default=
 
 
 # =========================================================================
-# 4. APP
+# 4. COMPETITION (teams, scoreboard, current run)
+# =========================================================================
+# Kept in <DOJO_MAP_DIR>/competition.json so a restart doesn't lose the scoreboard.
+# The judges' page keeps the run being scored in the browser and posts it here when
+# finalised; /current is only so other screens can show who is playing.
+comp_router = APIRouter(prefix='/api/competition', tags=['competition'])
+_comp_lock = threading.Lock()
+_comp = None
+
+
+def _dump(model):
+    return model.model_dump() if hasattr(model, 'model_dump') else model.dict()   # pydantic 2 / 1
+
+
+def _comp_file() -> Path:
+    return map_dir() / 'competition.json'
+
+
+def _comp_data():
+    global _comp
+    if _comp is None:
+        try:
+            _comp = json.loads(_comp_file().read_text())
+        except (OSError, ValueError):
+            _comp = {}
+        _comp.setdefault('teams', [])
+        _comp.setdefault('runs', [])
+        _comp.setdefault('current', None)
+    return _comp
+
+
+def _comp_save():
+    try:
+        map_dir().mkdir(parents=True, exist_ok=True)
+        tmp = _comp_file().with_suffix('.tmp')
+        tmp.write_text(json.dumps(_comp, indent=1))
+        tmp.replace(_comp_file())
+    except OSError as e:
+        raise HTTPException(500, f'Could not save {_comp_file()}: {e}')
+
+
+class TeamIn(BaseModel):
+    name: str
+
+
+class CurrentRun(BaseModel):
+    team: str = ''
+    running: bool = False
+    elapsed_ms: int = 0
+    section: str = ''
+
+
+class RunIn(BaseModel):
+    team: str
+    elapsed_ms: int = Field(ge=0)
+    total: float
+    scores: dict[str, float] = {}
+    displayed: str = ''
+    detected: str = ''
+    notes: str = ''
+
+
+@comp_router.get('')
+async def comp_get():
+    with _comp_lock:
+        return _comp_data()
+
+
+@comp_router.post('/teams')
+async def comp_add_team(t: TeamIn):
+    name = _clean_team(t.name)
+    if not name:
+        return {'success': False, 'message': 'Team name is empty'}
+    with _comp_lock:
+        d = _comp_data()
+        if name.lower() in (x.lower() for x in d['teams']):
+            return {'success': False, 'message': f'{name} already exists'}
+        d['teams'].append(name)
+        _comp_save()
+    return {'success': True, 'message': f'Added {name}'}
+
+
+@comp_router.delete('/teams/{name}')
+async def comp_remove_team(name: str):
+    with _comp_lock:
+        d = _comp_data()
+        d['teams'] = [x for x in d['teams'] if x.lower() != name.lower()]
+        _comp_save()
+    return {'success': True, 'message': f'Removed {name} (its runs are kept)'}
+
+
+@comp_router.post('/current')
+async def comp_current(c: CurrentRun):
+    with _comp_lock:
+        _comp_data()['current'] = _dump(c) | {'team': _clean_team(c.team), 'time': time.time()}
+    return {'success': True}
+
+
+@comp_router.post('/runs')
+async def comp_add_run(r: RunIn):
+    run = _dump(r) | {'id': uuid.uuid4().hex[:8], 'team': _clean_team(r.team) or 'unknown',
+                            'notes': r.notes[:500], 'time': time.time()}
+    with _comp_lock:
+        d = _comp_data()
+        d['runs'].append(run)
+        d['current'] = None
+        _comp_save()
+    return {'success': True, 'message': f"Saved {run['team']}: {run['total']:g} pts", 'id': run['id']}
+
+
+@comp_router.delete('/runs/{rid}')
+async def comp_remove_run(rid: str):
+    with _comp_lock:
+        d = _comp_data()
+        d['runs'] = [x for x in d['runs'] if x['id'] != rid]
+        _comp_save()
+    return {'success': True, 'message': 'Run deleted'}
+
+
+# =========================================================================
+# 5. APP
 # =========================================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -626,6 +793,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(dispenser_router)
 app.include_router(maps_router)
+app.include_router(comp_router)
 
 try:
     pkg_share = get_package_share_directory('web_pi_bridge')
@@ -641,6 +809,21 @@ except Exception:
 # Serve CSS/JS assets (and dojo_map.py for teams) from /static
 print(f"STATIC_DIR = {STATIC_DIR}, exists = {os.path.exists(STATIC_DIR)}")
 app.mount("/static", StaticFiles(directory=STATIC_DIR, follow_symlink=True), name="static")
+
+# Organisation logos live in the screen_images package (also shown on the Pi screen).
+LOGOS = ('icon.png', 'title.jpg', 'title_slogan.jpg', 'title_slogan_footer.png')
+try:
+    LOGO_DIR = Path(get_package_share_directory('screen_images')) / 'logos'
+except Exception:
+    LOGO_DIR = Path(__file__).resolve().parents[2] / 'screen_images' / 'logos'
+
+
+@app.get("/logos/{name}", response_class=FileResponse)
+async def get_logo(name: str):
+    path = LOGO_DIR / name
+    if name not in LOGOS or not path.exists():
+        raise HTTPException(404, 'Unknown logo')
+    return FileResponse(path)
 
 
 @app.get("/", response_class=FileResponse)
