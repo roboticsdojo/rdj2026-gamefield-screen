@@ -17,7 +17,10 @@ and bridges HTTP requests from the browser into ROS 2 service calls on the Pi.
 - Holds two ROS 2 service clients pointed at the Pi's `screen_manager_node`:
   - `/screen_manager_node/set_display` (`example_interfaces/srv/SetBool`, legacy)
   - `/screen_manager_node/set_display_class` (`screen_interfaces/srv/SetDisplayClass`)
-- Serves `templates/index.html` and mounts `static/` (CSS/JS) at `/static`,
+- Also contains the dispenser bridge node + `/api/dispenser/*` router and the
+  map-exchange `/api/maps/*` router (previously `dispenser_bridge.py` and
+  `map_exchange.py`; everything server-side now lives in this one file).
+- Serves `templates/index.html` (for both `/` and `/team`) and mounts `static/` at `/static`,
   resolving paths from the installed package share directory first and
   falling back to the source tree if that's missing.
 - Runs via `uvicorn` on **port 8000**, bound to `0.0.0.0`.
@@ -32,7 +35,10 @@ and bridges HTTP requests from the browser into ROS 2 service calls on the Pi.
 
 ## Frontend
 
-`templates/index.html` + `static/style.css` + `static/script.js`:
+One page, one stylesheet, one script: `templates/index.html` + `static/style.css` +
+`static/app.js`. `app.js` is split into labelled sections (screen, dispenser, obstacles,
+maps, team, device switcher); the switcher must stay last. `/team` serves the same
+page, and `app.js` detects the path and shows only the team upload view.
 
 - Embeds the Pi's live stream directly: `<img src="http://<pi-ip>:8080/stream">`.
   **This IP is hardcoded in `index.html`** — update it there if the Pi's
@@ -87,12 +93,12 @@ choice is kept in the URL hash, e.g. `http://<laptop-ip>:8000/#dispenser`.
 
 Files, all separate from the screen ones:
 
-| File | Role |
-|------|------|
-| `web_pi_bridge/dispenser_bridge.py` | ROS node + FastAPI router for `/api/dispenser/*` |
-| `static/dispenser.js` | Panel logic, polls `/api/dispenser/status` every 1 s while visible |
-| `static/dispenser.css` | Panel styling |
-| `static/app.js` | Dropdown / panel switcher |
+| Where | Role |
+|-------|------|
+| `web_pi_bridge/fastapi_node.py` (section 2) | ROS node + FastAPI router for `/api/dispenser/*` |
+| `static/app.js` (dispenser section) | Panel logic, polls `/api/dispenser/status` every 1 s while visible |
+| `static/style.css` (dispenser section) | Panel styling |
+| `static/app.js` (device switcher) | Dropdown / panel switcher |
 
 | Method | Path | Body | Does |
 |--------|------|------|------|
@@ -118,13 +124,13 @@ it randomises which 3 of the 6 cells of a 3 x 2 grid hold the movable blocks, so
 you know how to set up the real gamefield. It never repeats the previous layout,
 and "Copy Layout" copies the cell names and coordinates.
 
-Files: `static/obstacles.js`, `static/obstacles.css`, plus the panel in `index.html`.
+Code: the obstacles sections of `static/app.js` and `static/style.css`, plus the panel in `index.html`.
 
 The grid's position comes from `Gamefield.stl`: the largest area with no walls or
 pockets is x -151..1489 mm, y 845..2265 mm (about 1640 x 1420 mm). Cell centres
 shown on the page are in that STL coordinate frame. Columns are A-C left to
 right, rows 1-2 top to bottom (row 1 = larger y). To change the grid, edit the
-constants at the top of `obstacles.js` (`COLS`, `ROWS`, `OBSTACLES`, `AREA`).
+constants at the top of the obstacles section of `app.js` (`COLS`, `ROWS`, `OBSTACLES`, `AREA`).
 
 ## Map request system (added)
 
@@ -179,8 +185,9 @@ token box). Judges' actions on the page are not protected, like the rest of this
 | POST | `/api/maps/request/{id}/fail` | Team reports it could not capture |
 | GET  | `/api/maps/file/{id}[/original]` | Display image / original file |
 
-Files: `web_pi_bridge/map_exchange.py` (server), `static/maps.js` + `maps.css`
-(judges' panel), `static/dojo_map.py` (team script), `templates/team.html` +
-`static/team.js` + `team.css` (team page). Pure Python 3 / FastAPI, no new
-dependencies.
+Code: `fastapi_node.py` (section 3, server), the maps and team sections of `static/app.js`
+and `static/style.css` (judges' panel + team page, the team page is the `#view-team` block in
+`index.html`), and `static/dojo_map.py` (team script, kept as its own file because teams
+download it with `curl` and it must run without this workspace). Pure Python 3 / FastAPI,
+no new dependencies.
 
