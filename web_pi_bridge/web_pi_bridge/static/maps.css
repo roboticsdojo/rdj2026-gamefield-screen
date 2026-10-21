@@ -1,0 +1,48 @@
+/* Judges' Map Request panel. Reuses colours/buttons from style.css. */
+#panel-maps { gap: 1.2%; }
+
+.maps-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+.maps-request { display: flex; gap: 10px; align-items: center; }
+.maps-request select, .maps-request input {
+    padding: 10px 12px; font-size: 1rem; color: #E0E0E0; background: #121212;
+    border: 1px solid #444; border-radius: 8px;
+}
+.maps-request input { width: 190px; }
+
+.maps-requests { display: flex; flex-direction: column; gap: 4px; max-height: 96px; overflow-y: auto; min-width: 320px; }
+.req { display: flex; justify-content: space-between; align-items: center; gap: 12px;
+       padding: 4px 10px; background: #1A1A1A; border-left: 4px solid #444; border-radius: 6px; font-size: 0.9rem; }
+.req-pending   { border-left-color: #E9C46A; }
+.req-fulfilled { border-left-color: #2A9D8F; }
+.req-failed    { border-left-color: #E76F51; }
+.req-cancel { padding: 2px 10px; font-size: 0.8rem; box-shadow: none; }
+
+.maps-body { flex: 1; min-height: 0; display: flex; gap: 2%; }
+.maps-viewer {
+    flex: 3; min-width: 0; display: flex; justify-content: center; align-items: center;
+    background: #1A1A1A; border: 2px solid #333; border-radius: 12px; padding: 1%; overflow: hidden;
+}
+#maps-img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }   /* fills the viewer, upscales small maps */
+.pixelated { image-rendering: pixelated; }
+#maps-empty { color: #666; text-align: center; line-height: 1.6; }
+#maps-empty code { color: #A0AAB5; }
+
+.maps-side {
+    flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 10px;
+    padding: 12px; background: #1A1A1A; border: 2px solid #333; border-radius: 12px; overflow-y: auto;
+}
+#maps-meta { color: #A0AAB5; font-size: 0.9rem; line-height: 1.5; }
+.meta-title { color: #FF5722; font-weight: 800; font-size: 1.05rem; }
+#maps-actions { flex-wrap: wrap; gap: 8px; }
+a.dl { padding: 8px 14px; font-size: 0.9rem; font-weight: 600; border-radius: 8px; text-decoration: none; display: inline-block; }
+a.btn-class { background-color: #2A9D8F; color: #fff; }
+a.btn-show  { background-color: #E9C46A; color: #121212; }
+
+#maps-history { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+.thumb { padding: 4px; background: #121212; border: 2px solid #333; border-radius: 8px;
+         display: flex; flex-direction: column; gap: 4px; align-items: center; box-shadow: none; }
+.thumb.active { border-color: #FF5722; }
+.thumb img { width: 100%; height: 56px; object-fit: contain; background: #fff; border-radius: 4px; }
+.thumb span { font-size: 0.7rem; color: #A0AAB5; font-weight: 600; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+#maps-status { text-align: center; font-size: 1rem; font-weight: 600; color: #88929B; }

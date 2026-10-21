@@ -79,3 +79,108 @@ repo README for the shared network setup.
 
 No systemd service for this one yet — it's started manually with `ros2 run`
 when needed.
+
+## Dispenser panel (added)
+
+The page header has a dropdown (**Gamefield Screen / Gamefield Dispenser**). The
+choice is kept in the URL hash, e.g. `http://<laptop-ip>:8000/#dispenser`.
+
+Files, all separate from the screen ones:
+
+| File | Role |
+|------|------|
+| `web_pi_bridge/dispenser_bridge.py` | ROS node + FastAPI router for `/api/dispenser/*` |
+| `static/dispenser.js` | Panel logic, polls `/api/dispenser/status` every 1 s while visible |
+| `static/dispenser.css` | Panel styling |
+| `static/app.js` | Dropdown / panel switcher |
+
+| Method | Path | Body | Does |
+|--------|------|------|------|
+| GET  | `/api/dispenser/status`  | - | Latest `StationStatus` + current/last dispense goal |
+| POST | `/api/dispenser/dispense`| `{station_id: 1-3, count: 1-4}` | Sends a `Dispense` action goal (returns immediately) |
+| POST | `/api/dispenser/cancel`  | - | Cancels the running goal |
+| POST | `/api/dispenser/enable`  | `{enabled: bool}` | `/gamefield/loading_station/enable` |
+| POST | `/api/dispenser/home`    | - | `/gamefield/loading_station/home` |
+| POST | `/api/dispenser/reset`   | - | `/gamefield/loading_station/reset` |
+
+Needs `loading_station_interfaces` built on the laptop. If it is missing, the
+screen page still works and the dispenser panel shows an "interfaces not
+installed" message.
+
+```bash
+colcon build --packages-select loading_station_interfaces && source install/setup.bash
+```
+
+## Obstacle layout panel (added)
+
+Third dropdown entry, **Obstacle Layout** (`/#obstacles`). Front-end only, no ROS:
+it randomises which 3 of the 6 cells of a 3 x 2 grid hold the movable blocks, so
+you know how to set up the real gamefield. It never repeats the previous layout,
+and "Copy Layout" copies the cell names and coordinates.
+
+Files: `static/obstacles.js`, `static/obstacles.css`, plus the panel in `index.html`.
+
+The grid's position comes from `Gamefield.stl`: the largest area with no walls or
+pockets is x -151..1489 mm, y 845..2265 mm (about 1640 x 1420 mm). Cell centres
+shown on the page are in that STL coordinate frame. Columns are A-C left to
+right, rows 1-2 top to bottom (row 1 = larger y). To change the grid, edit the
+constants at the top of `obstacles.js` (`COLS`, `ROWS`, `OBSTACLES`, `AREA`).
+
+## Map request system (added)
+
+Lets the judges ask a team for its map and see it on the page. Third-party
+friendly: teams only need Python 3, not this ROS workspace.
+
+```
+judge page (Map Request)  --request-->  server queue  <--poll--  team script / /team page
+judge page  <--shows image--  server  <--upload PGM or screenshot--  team script / /team page
+```
+
+**Judges:** dropdown -> *Map Request*. Pick *PGM map*, *RViz screenshot* or *Either*,
+optionally a team name (blank = any team may answer), press *Request Map*. The
+request shows as WAITING until answered, and can be cancelled. Unanswered requests
+expire after 10 minutes. A team that cannot capture reports why, shown in red.
+Received maps appear on the page automatically; PGMs are converted to PNG for
+display, and both *Download PNG* and *Download PGM* (original) are offered.
+Files are stored in `~/dojo_maps` (override with `DOJO_MAP_DIR`).
+
+**Teams (Ubuntu 24.04, Pi or PC):**
+
+```bash
+curl -fsSL http://<laptop-ip>:8000/static/dojo_map.py -o dojo_map.py
+source /opt/ros/jazzy/setup.bash          # only needed for PGM capture
+python3 dojo_map.py --server http://<laptop-ip>:8000 --team Alpha            # answer the current request once
+python3 dojo_map.py --server http://<laptop-ip>:8000 --team Alpha --watch    # answer every request automatically
+python3 dojo_map.py --server ... --team Alpha --push pgm                     # send now, unrequested
+python3 dojo_map.py --server ... --team Alpha --file ~/rviz.png              # send an existing file
+```
+
+- **PGM:** subscribes once to `/map` (`--topic` to change), writes it like nav2
+  `map_saver` (free 254, occupied 0, unknown 205) and uploads it with resolution
+  and origin. Needs the robot's ROS environment (same `ROS_DOMAIN_ID` / RMW).
+- **Screenshot:** RViz has no screenshot command, so the script uses the first
+  tool found (`gnome-screenshot`, `grim`, `scrot`, ImageMagick `import`, `maim`).
+  On X11 with `xdotool` it captures just the RViz window, otherwise the whole
+  screen, so keep RViz visible. If nothing works, take the screenshot manually and
+  use `--file`. A headless Pi should use PGM.
+- Teams without a terminal can use `http://<laptop-ip>:8000/team` (pick file, Send).
+
+**Optional token:** start the server with `DOJO_TOKEN=secret` and teams must pass
+`--token secret` (or `DOJO_TOKEN` in their environment; the `/team` page shows a
+token box). Judges' actions on the page are not protected, like the rest of this page.
+
+| Method | Path | Does |
+|--------|------|------|
+| GET  | `/api/maps/status` | Recent requests and received maps |
+| POST | `/api/maps/request` | `{format: pgm\|screenshot\|any, team}` creates a request |
+| POST | `/api/maps/request/{id}/cancel` | Cancel a pending request |
+| GET  | `/api/maps/pending?team=` | Requests a team should answer |
+| POST | `/api/maps/upload?team=&request_id=` | Raw file body (.pgm/.png/.jpg, max 25 MB) |
+| POST | `/api/maps/request/{id}/fail` | Team reports it could not capture |
+| GET  | `/api/maps/file/{id}[/original]` | Display image / original file |
+
+Files: `web_pi_bridge/map_exchange.py` (server), `static/maps.js` + `maps.css`
+(judges' panel), `static/dojo_map.py` (team script), `templates/team.html` +
+`static/team.js` + `team.css` (team page). Pure Python 3 / FastAPI, no new
+dependencies.
+

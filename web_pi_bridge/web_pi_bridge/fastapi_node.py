@@ -10,9 +10,12 @@ from pydantic import BaseModel
 from ament_index_python.packages import get_package_share_directory
 
 import rclpy
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from example_interfaces.srv import SetBool
 from screen_interfaces.srv import SetDisplayClass
+
+from web_pi_bridge import dispenser_bridge, map_exchange
 
 
 class WebBridgeNode(Node):
@@ -60,18 +63,29 @@ async def lifespan(app: FastAPI):
     if not rclpy.ok():
         rclpy.init()
     ros_node = WebBridgeNode()
+    dispenser_bridge.node = dispenser_bridge.make_node()  # None if interfaces missing
 
-    thread = threading.Thread(target=lambda: rclpy.spin(ros_node), daemon=True)
+    # One executor spins both nodes (screen + dispenser) on a background thread
+    executor = MultiThreadedExecutor(num_threads=4)
+    executor.add_node(ros_node)
+    if dispenser_bridge.node is not None:
+        executor.add_node(dispenser_bridge.node)
+    thread = threading.Thread(target=executor.spin, daemon=True)
     thread.start()
 
     yield
 
+    executor.shutdown()
     ros_node.destroy_node()
+    if dispenser_bridge.node is not None:
+        dispenser_bridge.node.destroy_node()
     if rclpy.ok():
         rclpy.shutdown()
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(dispenser_bridge.router)
+app.include_router(map_exchange.router)
 
 try:
     pkg_share = get_package_share_directory('web_pi_bridge')
@@ -102,6 +116,11 @@ async def get_index():
     if not os.path.exists(TEMPLATE_PATH):
         return FileResponse("index.html")
     return FileResponse(TEMPLATE_PATH)
+
+
+@app.get("/team", response_class=FileResponse)
+async def get_team_page():
+    return FileResponse(os.path.join(os.path.dirname(TEMPLATE_PATH), 'team.html'))
 
 
 @app.post("/api/set_display")
