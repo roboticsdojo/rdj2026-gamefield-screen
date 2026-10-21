@@ -53,21 +53,21 @@ fi
 ```
 Build on WSL
 ```
+chmod +x dojo_env.sh && source dojo_env.sh
 source /opt/ros/jazzy/setup.bash
-cd $DISP_WS && colcon build --packages-select loading_station_interfaces
-source install/setup.bash
-cd $SCREEN_REPO && colcon build --packages-select screen_interfaces web_pi_bridge --symlink-install
+cd $DISP_WS && colcon build --packages-select loading_station_interfaces && source install/setup.bash
+cd $SCREEN_REPO && colcon build --packages-select screen_interfaces --symlink-install
+cd $SCREEN_REPO && colcon build --packages-select web_pi_bridge --symlink-install
 ```
 Build on the pi
 ```
-cd ~/path/to/rdj2026-gamefield-dispenser/loading_zone_ws
-colcon build --symlink-install && source install/setup.bash
+cd ~/rdj2026-gamefield-dispenser/loading_zone_ws &&colcon build --symlink-install && source install/setup.bash
 sudo cp udev/99-loading-station.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger   # then replug the Arduino
 ls -l /dev/loading_station
 ```
 ## Launching
-The screen nodes are already systemd services (can we merge these services, or have one for the dispenser too)
+Nodes on the pi lauched by startup services ()
 
 On the pi
 ```
