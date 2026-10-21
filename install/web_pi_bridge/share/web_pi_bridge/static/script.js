@@ -1,1 +1,0 @@
-/home/kitana/ros2_ws/src/rdj2026-gamefield-screen/build/web_pi_bridge/web_pi_bridge/static/script.js

@@ -1,8 +1,0 @@
-setup.py
-screen_interfaces/__init__.py
-screen_interfaces.egg-info/PKG-INFO
-screen_interfaces.egg-info/SOURCES.txt
-screen_interfaces.egg-info/dependency_links.txt
-screen_interfaces.egg-info/top_level.txt
-screen_interfaces/srv/__init__.py
-screen_interfaces/srv/_set_display_class.py
