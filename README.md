@@ -67,31 +67,20 @@ Prerequisites: ROS 2 Jazzy, plus `fastapi` and `uvicorn` for Python (already nee
 
 ```bash
 source ~/dojo_env.sh on                     # sets SCREEN_REPO / DISP_WS (build output doesn't exist yet, that's fine)
-cd $DISP_WS && colcon build --packages-select loading_station_interfaces
-source install/setup.bash
+cd $DISP_WS && colcon build --packages-select loading_station_interfaces && source install/setup.bash
 cd $SCREEN_REPO && colcon build --packages-select screen_interfaces web_pi_bridge --symlink-install
 source ~/dojo_env.sh on                     # re-source so both workspaces are picked up
 ```
-
-Rebuild `web_pi_bridge` after adding or removing files in its `static/` or `templates/` folders
-(they are installed from a glob at build time).
 
 ### 3. Build the Pi
 
 The screen packages are already built if the screen services run. For the dispenser:
 
 ```bash
-cd ~/path/to/rdj2026-gamefield-dispenser/loading_zone_ws
-colcon build --symlink-install && source install/setup.bash
+source dojo_env.sh
 
-# one-time: stable device name for the Arduino
-sudo cp udev/99-loading-station.rules /etc/udev/rules.d/
-sudo udevadm control --reload-rules && sudo udevadm trigger     # then replug the Arduino
-ls -l /dev/loading_station
+cd $DISP_WS && colcon build --symlink-install && source install/setup.bash
 ```
-
-Make sure your user is in the `dialout` group (`groups`; add with `sudo usermod -aG dialout $USER`, then log in again).
-
 ## Running with the Pi ON
 
 **On the Pi** (screen nodes are systemd services; the dispenser is started by hand until you add a service, see below):
@@ -109,7 +98,7 @@ ros2 launch loading_station loading_station.launch.py
 
 ```bash
 source ~/dojo_env.sh on
-ros2 run web_pi_bridge fastapi_node         # then open http://localhost:8000
+        # then open http://localhost:8000
 ```
 
 **Test from a second laptop terminal** (`source ~/dojo_env.sh on` first):
@@ -189,7 +178,7 @@ Only one file is needed: [`robot/dojo_map.py`](robot/dojo_map.py). Teams can als
 cp dojo_map.py ~/auracle_ws/src/auracle_bringup/scripts/
 chmod +x ~/auracle_ws/src/auracle_bringup/scripts/dojo_map.py
 source /opt/ros/jazzy/setup.bash && source ~/auracle_ws/install/setup.bash   # robot's ROS environment (for PGM capture)
-python3 ~/auracle_ws/src/auracle_bringup/scripts/dojo_map.py --server http://<judges-ip>:8000 --team Auracle --watch
+python3 ~/auracle_ws/src/auracle_bringup/scripts/dojo_map.py --server http://100.106.223.98:8000 --team Auracle --watch
 ```
 
 **Option B: installed, so `ros2 run` and launch work.** In `auracle_bringup/CMakeLists.txt` add
@@ -288,3 +277,16 @@ journalctl -u loading_station -f                  # live log
 | Map script: "no map received on /map" | SLAM not running, different topic (`--topic`), or different `ROS_DOMAIN_ID` |
 | Map script: 401 | Judges set `DOJO_TOKEN`; pass `--token` |
 | Screenshot is black or empty | Wayland/WSL limitation; use `--file` with a manual screenshot |
+
+ chmod +x ~/auracle_ws/Random-code/src/auracle_bringup/scripts
+/dojo_map.py
+auracle@auracle:~$ cd auracle_ws/Random-code/src/auracle_bringup/scripts
+auracle@auracle:~/auracle_ws/Random-code/src/auracle_bringup/scripts$ python3 dojo_map.py --server http://localhost:8000 --team Test --file /home/auracle/auracle_ws/Random-code/src/auracle_bringup/config/map_1.pgm
+error: cannot reach http://localhost:8000 ([Errno 111] Connection refused)
+auracle@auracle:~/auracle_ws/Random-code/src/auracle_bringup/scripts$ python3 dojo_map.py --server http://100.106.223.98:8000 --team Test --file /home/auracle/a
+uracle_ws/Random-code/src/auracle_bringup/config/map_1.pgm
+[16:24:09] answering a pending request
+[16:24:09] OK: Received pgm from Test for request cd9d51
+
+chmod +x /dojo_map.py
+python3 dojo_map.py --server http://100.106.223.98:8000 --team TEAM_NAME --file PATH_TO_PGM_FILE

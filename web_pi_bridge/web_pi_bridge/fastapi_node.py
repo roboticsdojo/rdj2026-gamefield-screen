@@ -25,7 +25,11 @@ Map exchange flow
      original is kept and downloadable.
   Detection images use the same flow with format "detection": the robot uploads the
   frame it classified plus ?kind=detection&label=plastic&confidence=0.93.
-  Live stream: the robot registers its MJPEG URL     -> POST /api/maps/stream
+  RViz live: a judge requests format "rviz_live"; the team's dojo_rviz_stream.py sees it
+  (GET /api/maps/pending), streams the RViz window as MJPEG and registers the URL with
+  kind "rviz"                                         -> POST /api/maps/stream
+  The judges' page shows that URL in the "RViz live" tab (the browser pulls it straight
+  from the robot, nothing is relayed through this server).
 
 Environment
   DOJO_MAP_DIR  where received files and competition.json are stored (default ~/dojo_maps)
@@ -341,7 +345,7 @@ maps_router = APIRouter(prefix='/api/maps', tags=['maps'])
 
 _requests = []   # oldest first
 _maps = []       # oldest first (maps, screenshots and detection images)
-_streams = {}    # team (lower case) -> {'team', 'url', 'time'}
+_streams = {}    # (team lower case, kind) -> {'team', 'kind', 'url', 'time'}
 
 
 def map_dir() -> Path:
@@ -456,7 +460,7 @@ def _public_map(m):
 
 # ------------------------------------------------------------------ judge side
 class NewRequest(BaseModel):
-    format: Literal['pgm', 'screenshot', 'any', 'detection'] = 'any'
+    format: Literal['pgm', 'screenshot', 'any', 'detection', 'rviz_live'] = 'any'
     team: str = ''
 
 
@@ -478,7 +482,7 @@ async def create_request(req: NewRequest):
          'answered_by': '', 'message': ''}
     _requests.append(r)
     del _requests[:-KEEP]
-    what = 'detection image' if req.format == 'detection' else f'{req.format} map'
+    what = {'detection': 'detection image', 'rviz_live': 'RViz live stream'}.get(req.format, f'{req.format} map')
     return {'success': True, 'message': f"Requested {what}"
             + (f" from {r['team']}" if r['team'] else ' from any team'), 'id': r['id']}
 
@@ -606,24 +610,33 @@ async def upload(request: Request, team: str = '', request_id: str = '', filenam
 
 class StreamInfo(BaseModel):
     team: str = ''
-    url: str = ''     # blank = remove
+    url: str = ''             # blank = remove
+    kind: Literal['rviz', 'camera'] = 'rviz'
+    request_id: str = ''      # optional: the "rviz_live" request this stream answers
 
 
 @maps_router.post('/stream')
 async def register_stream(s: StreamInfo, x_dojo_token: str = Header(default='')):
-    """The robot tells the judges where its camera's MJPEG stream lives."""
+    """The robot tells the judges where its MJPEG stream (RViz window or camera) lives."""
     _check_token(x_dojo_token)
     team = _clean_team(s.team)
     if not team:
         raise HTTPException(422, 'team is required')
     url = s.url.strip()
+    key = (team.lower(), s.kind)
     if not url:
-        _streams.pop(team.lower(), None)
+        _streams.pop(key, None)
         return {'success': True, 'message': f'Stream for {team} removed'}
     if len(url) > 300 or not re.fullmatch(r'https?://[^\s"\'<>]+', url):
         raise HTTPException(422, 'url must look like http://<robot-ip>:8081/stream')
-    _streams[team.lower()] = {'team': team, 'url': url, 'time': time.time()}
-    return {'success': True, 'message': f'Stream for {team} registered'}
+    _expire()
+    req = _find_request(s.request_id) if s.request_id else None
+    if req is not None and req['status'] == 'pending' and req['format'] == 'rviz_live':
+        if req['team'] and req['team'].lower() != team.lower():
+            raise HTTPException(403, f"Request {s.request_id} is addressed to team {req['team']}")
+        req.update(status='fulfilled', answered_by=team)
+    _streams[key] = {'team': team, 'kind': s.kind, 'url': url, 'time': time.time()}
+    return {'success': True, 'message': f'{s.kind} stream for {team} registered'}
 
 
 class Failure(BaseModel):
@@ -697,7 +710,7 @@ class CurrentRun(BaseModel):
 class RunIn(BaseModel):
     team: str
     elapsed_ms: int = Field(ge=0)
-    total: float
+    total: float = 0          # marks were removed from the judges' page; kept so old clients still post
     scores: dict[str, float] = {}
     displayed: str = ''
     detected: str = ''

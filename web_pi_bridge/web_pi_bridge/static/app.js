@@ -1,7 +1,7 @@
 // Robotics Dojo control page - all front-end logic in one file.
-// Sections: helpers, run state + scoring, timer, competition (teams/scoreboard),
-// screen + detection, dispenser, obstacles, navigation judging, maps (judges),
-// final score, team (/team), shell (sidebar / theme / pollers) - the shell must stay last.
+// Sections: helpers, run state, timer, competition (teams/scoreboard),
+// screen + detection, dispenser, obstacles, maps + RViz live (judges),
+// finish run, team (/team), shell (sidebar / theme / pollers) - the shell must stay last.
 // Anything that comes from teams (names, labels) is inserted with textContent.
 
 // ======================================================================
@@ -81,64 +81,21 @@ function toast(title, msg, actionLabel, action, ms, tag) {
 }
 
 // ======================================================================
-// RUN STATE + SCORING (rules: Robotics Dojo 2026, section 7)
+// RUN STATE
 // ======================================================================
-// The run being scored lives in this browser (localStorage), so a refresh mid-run
+// The run being tracked lives in this browser (localStorage), so a refresh mid-run
 // loses nothing. It is sent to the server only when finalised.
-const SCORING = {
-    detection: [
-        { key: 'det_class', label: 'Classification accuracy', max: 6, hint: 'set from the checkmark' },
-        { key: 'det_speed', label: 'Detection speed', max: 6 },
-        { key: 'det_nav', label: 'Navigation to screen', max: 3 },
-    ],
-    loading: [
-        { key: 'load_station', label: 'Station selection', max: 4 },
-        { key: 'load_position', label: 'Positioning', max: 3 },
-        { key: 'load_secure', label: 'Item securement', max: 3 },
-    ],
-    obstacles: [
-        { key: 'obs_detect', label: 'Detection', max: 6 },
-        { key: 'obs_avoid', label: 'Avoidance / response', max: 6 },
-        { key: 'obs_path', label: 'Path efficiency', max: 3 },
-    ],
-    route: [
-        { key: 'route', label: 'Gate decision', hint: 'waits if gate opens in time, else reroutes',
-          options: [[10, 'Correct'], [5, 'Inefficient'], [0, 'Failed']] },
-    ],
-    depositing: [
-        { key: 'dep_color', label: 'Colour detection', max: 5 },
-        { key: 'dep_bin', label: 'Bin selection', max: 5 },
-        { key: 'dep_place', label: 'Placement precision', max: 3 },
-        { key: 'dep_finish', label: 'Finish position', max: 2 },
-    ],
-    stopping: [{ key: 'stopping', label: 'Robot stops by itself', max: 2 }],
-    mapping: [
-        { key: 'map_complete', label: 'Completeness', max: 5 },
-        { key: 'map_accuracy', label: 'Accuracy & usability', max: 5 },
-    ],
-    finish: [
-        { key: 'finish', label: 'Finish time', options: [[3, 'Fastest'], [2, 'Average'], [1, 'Minimum'], [0, 'DNF']] },
-    ],
-};
-const TERRAINS = ['Gravel', 'Sand', 'Ramps', 'Grass', 'Grater'];   // 3 points each
-const SHEET = [
-    ['Mapping', 'mapping', 10], ['Waste detection', 'detection', 15], ['Terrain', 'terrain', 15],
-    ['Obstacles', 'obstacles', 15], ['Loading', 'loading', 10], ['Route decision', 'route', 10],
-    ['Depositing', 'depositing', 15], ['Finish time', 'finish', 3], ['Stopping mechanism', 'stopping', 2],
-];
 const STEPS = [
-    ['screen', 'Gamefield screen', 'detection', 'detectionMs'],
-    ['loading', 'Loading station', 'loading', 'loadedMs'],
-    ['obstacles', 'Dynamic obstacles', 'obstacles', null],
-    ['navigation', 'Navigation', 'navigation', null],
-    ['maps', 'Map & final score', 'mapping', 'stoppedMs'],
+    ['screen', 'Gamefield screen', 'detectionMs'],
+    ['loading', 'Loading station', 'loadedMs'],
+    ['obstacles', 'Dynamic obstacles', null],
+    ['maps', 'Map & RViz', 'stoppedMs'],
 ];
 
 function newRun(team) {
     return { team: team || '', running: false, startedAt: 0, elapsedMs: 0, epochStart: 0,
              displayed: '', detected: '', detConf: null, detId: null, detectionMs: null,
-             correct: null, loadedMs: null, stoppedMs: null, gate: '',
-             scores: {}, terrain: [], penalty: 0, notes: '', done: {} };
+             correct: null, loadedMs: null, stoppedMs: null, notes: '', done: {} };
 }
 let run = Object.assign(newRun(), store.get('dojoRun', {}));
 const runListeners = [];
@@ -146,59 +103,15 @@ function onRun(fn) { runListeners.push(fn); }
 function saveRun() { store.set('dojoRun', run); runListeners.forEach((fn) => fn()); }
 const elapsed = () => (run.running ? Date.now() - run.startedAt : run.elapsedMs);
 
-function groupScore(g) {
-    if (g === 'terrain') return run.terrain.length * 3;
-    if (g === 'navigation') return groupScore('terrain') + groupScore('route') + groupScore('depositing') + groupScore('stopping');
-    return SCORING[g].reduce((s, c) => s + (run.scores[c.key] || 0), 0);
-}
-function totalScore() {
-    return SHEET.reduce((s, [, g]) => s + groupScore(g), 0) - (Number(run.penalty) || 0);
-}
-
-// Marks: a segmented 0..max (or named options) control per criterion.
-function renderCriteria() {
-    document.querySelectorAll('.criteria[data-group]').forEach((box) => {
-        if (!box.childElementCount) {
-            SCORING[box.dataset.group].forEach((c) => {
-                const row = el('div', 'crit');
-                const lab = el('div', 'crit-label', c.label + ' ');
-                lab.appendChild(el('span', 'muted', `/${c.max ?? c.options[0][0]}`));
-                if (c.hint) lab.appendChild(el('small', '', c.hint));
-                const seg = el('div', 'seg' + (c.options ? ' wide' : ''));
-                const opts = c.options || Array.from({ length: c.max + 1 }, (_, i) => [i, String(i)]);
-                opts.forEach(([v, text]) => {
-                    const b = el('button', '', text);
-                    b.dataset.key = c.key;
-                    b.dataset.value = v;
-                    b.addEventListener('click', () => {
-                        if (run.scores[c.key] === v) delete run.scores[c.key];
-                        else run.scores[c.key] = v;
-                        saveRun();
-                    });
-                    seg.appendChild(b);
-                });
-                row.append(lab, seg);
-                box.appendChild(row);
-            });
-        }
-        box.querySelectorAll('button[data-key]').forEach((b) => {
-            b.classList.toggle('on', run.scores[b.dataset.key] === Number(b.dataset.value));
-        });
-    });
-}
-onRun(renderCriteria);
 
 // ======================================================================
 // TIMER
 // ======================================================================
 (function () {
-    const LIMIT_MS = 3 * 60 * 1000;     // autonomous phase
-
     function tick() {
         const ms = elapsed();
         $('timer-display').textContent = fmt(ms);
         $('timer').classList.toggle('running', run.running);
-        $('timer').classList.toggle('over', ms > LIMIT_MS);
     }
     setInterval(() => { if (run.running) tick(); }, 100);
 
@@ -227,8 +140,8 @@ onRun(renderCriteria);
         run.stoppedMs = run.elapsedMs;
         saveRun();
         window.pushCurrent();
-        if (window.currentSection === 'maps') toast(`Timer stopped at ${fmt(run.elapsedMs)}`, 'Request the map and finalise the score.', '', null, 0, 'run');
-        else toast(`Timer stopped at ${fmt(run.elapsedMs)}`, 'Request the map and finalise the score.',
+        if (window.currentSection === 'maps') toast(`Timer stopped at ${fmt(run.elapsedMs)}`, 'Request the map or RViz live and finalise the run.', '', null, 0, 'run');
+        else toast(`Timer stopped at ${fmt(run.elapsedMs)}`, 'Request the map or RViz live and finalise the run.',
                    'Go to Map Request', () => window.go('maps'), 0, 'run');
     };
 
@@ -243,7 +156,6 @@ onRun(renderCriteria);
         $('timer-start').querySelector('span').textContent = !run.running && run.elapsedMs ? 'Resume' : 'Start';
         $('home-start').disabled = run.running;
         $('team-chip').textContent = run.team || 'No team';
-        $('score-chip').textContent = `${totalScore()} pts`;
     });
 })();
 
@@ -266,7 +178,10 @@ onRun(renderCriteria);
 
     function renderTeams() {
         const sel = $('team-select');
-        const names = [...comp.teams];
+        // teams listed in index.html (data-teams) plus any added through "Manage teams"
+        const preset = ($('team-select').dataset.teams || '').split(';').map((n) => n.trim()).filter(Boolean);
+        const names = [...preset];
+        comp.teams.forEach((n) => { if (!names.some((x) => x.toLowerCase() === n.toLowerCase())) names.push(n); });
         if (run.team && !names.some((n) => n.toLowerCase() === run.team.toLowerCase())) names.push(run.team);
         sel.replaceChildren(el('option', '', 'Select a team…'));
         sel.firstChild.value = '';
@@ -300,23 +215,22 @@ onRun(renderCriteria);
             if (!b) best.set(k, { team: r.team, run: r, count: 1 });
             else {
                 b.count++;
-                if (r.total > b.run.total || (r.total === b.run.total && r.elapsed_ms < b.run.elapsed_ms)) b.run = r;
+                if (r.elapsed_ms < b.run.elapsed_ms) b.run = r;
             }
         });
-        const rows = [...best.values()].sort((a, b) => b.run.total - a.run.total || a.run.elapsed_ms - b.run.elapsed_ms);
+        const rows = [...best.values()].sort((a, b) => a.run.elapsed_ms - b.run.elapsed_ms);
         const tb = $('scoreboard').querySelector('tbody');
         tb.replaceChildren();
         if (!rows.length) {
             const td = el('td', 'empty', 'No finished runs yet.');
-            td.colSpan = 5;
+            td.colSpan = 4;
             tb.appendChild(el('tr')).appendChild(td);
         }
         rows.forEach((r, i) => {
             const tr = el('tr', i === 0 ? 'top' : '');
             if (run.team && r.team.toLowerCase() === run.team.toLowerCase()) tr.classList.add('playing');
             tr.append(el('td', 'rank', String(i + 1)), el('td', '', r.team),
-                      el('td', 'num', String(r.run.total)), el('td', 'num', fmt(r.run.elapsed_ms)),
-                      el('td', 'num', String(r.count)));
+                      el('td', 'num', fmt(r.run.elapsed_ms)), el('td', 'num', String(r.count)));
             tb.appendChild(tr);
         });
 
@@ -324,7 +238,7 @@ onRun(renderCriteria);
         rb.replaceChildren();
         if (!comp.runs.length) {
             const td = el('td', 'empty', 'Nothing yet.');
-            td.colSpan = 6;
+            td.colSpan = 5;
             rb.appendChild(el('tr')).appendChild(td);
         }
         [...comp.runs].reverse().forEach((r) => {
@@ -334,14 +248,14 @@ onRun(renderCriteria);
             del.title = 'Delete this run';
             del.appendChild(icon('x'));
             del.addEventListener('click', async () => {
-                if (!confirm(`Delete ${r.team}'s run (${r.total} pts)?`)) return;
+                if (!confirm(`Delete ${r.team}'s run (${fmt(r.elapsed_ms)})?`)) return;
                 await api('/api/competition/runs/' + r.id, undefined, 'DELETE');
                 load();
             });
             const td = el('td');
             td.appendChild(del);
             tr.append(el('td', '', new Date(r.time * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
-                      el('td', '', r.team), el('td', 'num', String(r.total)), el('td', 'num', fmt(r.elapsed_ms)),
+                      el('td', '', r.team), el('td', 'num', fmt(r.elapsed_ms)),
                       el('td', 'small', det), td);
             rb.appendChild(tr);
         });
@@ -356,17 +270,16 @@ onRun(renderCriteria);
         }
         box.appendChild(el('div', 'now-team', run.team));
         const state = run.running ? 'Running' : run.elapsedMs ? `Stopped at ${fmt(run.elapsedMs)}` : 'Ready to start';
-        box.appendChild(el('div', 'now-meta', `${state} · ${totalScore()} pts so far`));
+        box.appendChild(el('div', 'now-meta', state));
     }
 
     function renderProgress() {
         const ol = $('progress-list');
         ol.replaceChildren();
-        STEPS.forEach(([sec, name, group, timeKey], i) => {
+        STEPS.forEach(([sec, name, timeKey], i) => {
             const li = el('li', run.done[sec] ? 'done' : '');
             li.append(el('span', 'p-dot', run.done[sec] ? '✓' : String(i + 1)), el('span', 'p-name', name),
-                      el('span', 'p-time', timeKey && run[timeKey] !== null ? fmt(run[timeKey]) : ''),
-                      el('span', 'p-score', String(groupScore(group))));
+                      el('span', 'p-time', timeKey && run[timeKey] !== null ? fmt(run[timeKey]) : ''));
             li.addEventListener('click', () => window.go(sec));
             ol.appendChild(li);
         });
@@ -377,8 +290,8 @@ onRun(renderCriteria);
 
     $('team-select').addEventListener('change', () => {
         const t = $('team-select').value;
-        const hasData = run.elapsedMs > 0 || Object.keys(run.scores).length;
-        if (hasData && t !== run.team && !confirm(`Discard the run being scored for ${run.team}?`)) {
+        const hasData = run.elapsedMs > 0 || run.displayed || run.detected;
+        if (hasData && t !== run.team && !confirm(`Discard the run in progress for ${run.team}?`)) {
             $('team-select').value = run.team;
             return;
         }
@@ -386,7 +299,6 @@ onRun(renderCriteria);
         saveRun();
         window.pushCurrent();
         renderScoreboard();
-        if (t) toast(`${t} selected`, 'Press Start when the autonomous phase begins.', 'Start run', window.startRun, 0, 'run');
     });
 
     $('team-add').addEventListener('click', async () => {
@@ -400,7 +312,7 @@ onRun(renderCriteria);
     $('team-new').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('team-add').click(); });
 
     $('home-reset').addEventListener('click', () => {
-        if (!confirm('Discard the run being scored? The timer and all marks are cleared.')) return;
+        if (!confirm('Discard the run in progress? The timer and detection are cleared.')) return;
         const team = run.team;
         run = newRun(team);
         saveRun();
@@ -418,9 +330,7 @@ onRun(renderCriteria);
 // ======================================================================
 (function () {
     let screenShown = 'logo';
-    let robotView = 'detection';
     let visible = false;
-    let streams = [];
 
     function setStatus(t) { $('status').textContent = t; }
 
@@ -455,7 +365,6 @@ onRun(renderCriteria);
 
     function setCorrect(value) {
         run.correct = value;
-        run.scores.det_class = value ? 6 : 0;    // classification accuracy follows the checkmark
         saveRun();
     }
     $('v-correct').addEventListener('click', () => setCorrect(run.correct !== true));
@@ -474,17 +383,10 @@ onRun(renderCriteria);
         } catch (e) { $('det-status').textContent = 'Error connecting to web bridge'; }
     });
 
-    document.querySelectorAll('[data-robot-view]').forEach((b) => b.addEventListener('click', () => {
-        robotView = b.dataset.robotView;
-        document.querySelectorAll('[data-robot-view]').forEach((x) => x.classList.toggle('active', x === b));
-        renderStreams();
-    }));
-
-    // Detection results arrive through the map exchange (kind = 'detection'); maps.js
-    // hands every status poll to this function.
+    // Detection results arrive through the map exchange (kind = 'detection'); the maps
+    // poller hands every status poll to this function.
     let known = null;
     window.screenOnMaps = (status) => {
-        streams = status.streams || [];
         const team = (run.team || '').toLowerCase();
         // this team's detections from this run (60 s slack for clock differences)
         const dets = status.maps.filter((m) => m.kind === 'detection' && m.team.toLowerCase() === team &&
@@ -505,7 +407,6 @@ onRun(renderCriteria);
         }
         const shown = dets.find((m) => m.id === run.detId) || (run.detId ? null : dets[0]);
         renderDetection(shown);
-        renderStreams();
     };
 
     function renderDetection(m) {
@@ -521,31 +422,13 @@ onRun(renderCriteria);
         $('det-status').textContent = `Detection received ${new Date(m.time * 1000).toLocaleTimeString()}`;
     }
 
-    function streamUrl() {
-        const manual = $('robot-stream-url').value.trim();
-        if (manual) return manual;
-        const s = streams.find((x) => x.team.toLowerCase() === (run.team || '').toLowerCase());
-        return s ? s.url : '';
-    }
-    function renderStreams() {
-        // only load MJPEG streams while they are on screen, they eat bandwidth
+
+    function renderScreenFeed() {
+        // only load the gamefield screen's MJPEG feed while the section is on screen, it eats bandwidth
         const screen = $('live-stream');
         if (visible) { if (!screen.getAttribute('src')) screen.src = screen.dataset.src; }
         else screen.removeAttribute('src');
-
-        $('robot-detection-view').hidden = robotView !== 'detection';
-        $('robot-live-view').hidden = robotView !== 'live';
-        const img = $('robot-stream');
-        const url = visible && robotView === 'live' ? streamUrl() : '';
-        $('robot-stream-empty').hidden = !!url;
-        img.hidden = !url;
-        if (!url) img.removeAttribute('src');
-        else if (img.getAttribute('src') !== url) img.src = url;
     }
-    $('robot-stream-url').addEventListener('change', () => {
-        store.set('dojoStream:' + run.team.toLowerCase(), $('robot-stream-url').value.trim());
-        renderStreams();
-    });
 
     function render() {
         $('screen-shown').textContent = 'Screen: ' + (screenShown === 'logo' ? 'logo' : classLabel(screenShown));
@@ -563,19 +446,14 @@ onRun(renderCriteria);
     }
     onRun(render);
 
-    window.screenStart = () => {
-        visible = true;
-        $('robot-stream-url').value = store.get('dojoStream:' + (run.team || '').toLowerCase(), '');
-        renderStreams();
-    };
-    window.screenStop = () => { visible = false; renderStreams(); };
+    window.screenStart = () => { visible = true; renderScreenFeed(); };
+    window.screenStop = () => { visible = false; renderScreenFeed(); };
 })();
 
 // ======================================================================
 // LOADING STATION (dispenser) - talks to /api/dispenser/*
 // ======================================================================
 (function () {
-    const CAPACITY = 4;          // compartments per station (loading_station.yaml: capacity)
     let enabled = true;
     let prev = null;             // previous snapshot, to log changes
     let stationClass = store.get('dojoStationMap', { 1: 'metal', 2: 'plastic', 3: 'organic' });
@@ -587,22 +465,18 @@ onRun(renderCriteria);
             <h3><span>STATION ${n}</span><span class="st-class"><select aria-label="Waste class of station ${n}">
                 <option value="organic">Organic</option><option value="metal">Metal</option><option value="plastic">Plastic</option>
             </select></span></h3>
-            <div class="slots">${'<div class="slot"></div>'.repeat(CAPACITY)}</div>
             <div class="left">- left</div>
             <div class="station-actions">
-                <select aria-label="Pieces to dispense from station ${n}">
-                    ${[1, 2, 3, 4].map((c) => `<option value="${c}">${c} pc</option>`).join('')}
-                </select>
                 <button class="btn btn-primary">Dispense</button>
             </div>`;
-        const [clsSel, countSel] = card.querySelectorAll('select');
+        const clsSel = card.querySelector('select');
         clsSel.value = stationClass[n];
         clsSel.addEventListener('change', () => {
             stationClass[n] = clsSel.value;
             store.set('dojoStationMap', stationClass);
             renderExpected();
         });
-        card.querySelector('button').addEventListener('click', () => dispense(+n, +countSel.value));
+        card.querySelector('button').addEventListener('click', () => dispense(+n, 1));
     });
 
     function renderExpected() {
@@ -707,9 +581,6 @@ onRun(renderCriteria);
         const busy = state === 'DISPENSING' || state === 'HOMING';
         document.querySelectorAll('.station').forEach((card, i) => {
             const left = st && st.remaining[i] !== undefined ? st.remaining[i] : null;
-            card.querySelectorAll('.slot').forEach((slot, k) => {
-                slot.classList.toggle('full', left !== null && k >= CAPACITY - left);
-            });
             card.querySelector('.left').textContent = left === null ? '- left' : `${left} left`;
             card.querySelector('.station-actions button').disabled = !idle || left === 0;
         });
@@ -821,51 +692,25 @@ onRun(renderCriteria);
     $('obs-auto').addEventListener('change', setAuto);
     $('obs-auto-s').addEventListener('change', setAuto);
 
-    randomize();   // start with a layout already shown
-})();
-
-// ======================================================================
-// NAVIGATION JUDGING: terrain, route decision (gate), depositing, stopping
-// ======================================================================
-(function () {
-    const box = $('terrain-chips');
-    TERRAINS.forEach((t) => {
-        const b = el('button', 'chip');
-        b.appendChild(icon('check'));
-        b.appendChild(document.createTextNode(`${t} · 3`));
-        b.dataset.terrain = t;
-        b.addEventListener('click', () => {
-            run.terrain = run.terrain.includes(t) ? run.terrain.filter((x) => x !== t) : [...run.terrain, t];
-            saveRun();
-        });
-        box.appendChild(b);
-    });
-
-    $('gate-random').addEventListener('click', () => {
-        run.gate = Math.random() < 0.5 ? 'OPEN' : 'CLOSED';
-        saveRun();
-        toast(`Gate ${run.gate}`, run.gate === 'OPEN' ? 'Path 2 is the efficient route.' : 'Robot should wait or take Path 1.');
-    });
-
-    $('nav-stop-timer').addEventListener('click', () => {
-        run.done.navigation = true;
+    $('obs-stop-timer').addEventListener('click', () => {
+        run.done.obstacles = true;
         window.go('maps');
         if (run.running) window.stopRun();
         else saveRun();
     });
-
     onRun(() => {
-        box.querySelectorAll('.chip').forEach((b) => b.classList.toggle('on', run.terrain.includes(b.dataset.terrain)));
-        $('gate-state').textContent = 'Gate: ' + (run.gate || 'not set');
-        $('nav-stop-timer').querySelector('span').textContent = run.running ? 'Stop timer & go to Map' : 'Go to Map';
+        $('obs-stop-timer').querySelector('span').textContent = run.running ? 'Stop timer & go to Map' : 'Go to Map';
     });
+
+    randomize();   // start with a layout already shown
 })();
 
 // ======================================================================
-// MAP REQUEST PANEL, judges - talks to /api/maps/*
+// MAP REQUEST PANEL + RVIZ LIVE, judges - talks to /api/maps/*
 // ======================================================================
 (function () {
-    const FORMAT_LABEL = { pgm: 'PGM map', screenshot: 'RViz screenshot', any: 'Either', detection: 'Detection image' };
+    const FORMAT_LABEL = { pgm: 'PGM map', screenshot: 'RViz screenshot', any: 'Either',
+                           detection: 'Detection image', rviz_live: 'RViz live' };
 
     let maps = [];
     let known = null;          // ids already seen (null until first poll)
@@ -873,17 +718,97 @@ onRun(renderCriteria);
     let followLatest = true;
     let historySig = '';
 
+    // ---- RViz live: the robot registers an MJPEG url (kind 'rviz'), we just show it
+    let rvizStreams = [];
+    let rvizPending = false;
+    let liveStopped = false;       // the judge pressed Stop
+    let knownStreams = null;       // 'team|url|time' keys already seen (null until first poll)
+    let liveState = '';            // '' | 'loading' | 'live' | 'error'
+    let shownUrl = '';
+
     function setStatus(t) { $('maps-status').textContent = t; }
     const ago = (s) => (s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`);
 
-    $('maps-request-btn').addEventListener('click', async () => {
+    $('maps-format').addEventListener('change', () => {
+        $('maps-request-btn').querySelector('span').textContent =
+            $('maps-format').value === 'rviz_live' ? 'Request RViz live' : 'Request map';
+    });
+
+    async function sendRequest(format, team) {
         setStatus('Sending request…');
         try {
-            const data = await api('/api/maps/request', { format: $('maps-format').value, team: $('maps-team').value });
+            const data = await api('/api/maps/request', { format, team });
             setStatus(data.message);
+            if (format === 'rviz_live') { liveStopped = false; setRviz(true, false); }
         } catch (e) { setStatus('Error connecting to web bridge'); }
         poll();
-    });
+    }
+    $('maps-request-btn').addEventListener('click', () => sendRequest($('maps-format').value, $('maps-team').value));
+    $('rviz-request').addEventListener('click', () => sendRequest('rviz_live', run.team || $('maps-team').value));
+
+
+    // ---- floating panel: open / collapsed state is remembered in the browser
+    const rvizUI = store.get('dojoRviz', { open: false, collapsed: false });
+    function setRviz(open, collapsed) {
+        rvizUI.open = open;
+        if (collapsed !== undefined) rvizUI.collapsed = collapsed;
+        store.set('dojoRviz', rvizUI);
+        window.rvizPanelOpen = open;
+        $('rviz-panel').hidden = !open;
+        $('rviz-panel').classList.toggle('collapsed', rvizUI.collapsed);
+        $('rviz-body').hidden = rvizUI.collapsed;
+        $('rviz-toggle').classList.toggle('active', open);
+        renderLive();
+        if (window.refreshPollers) window.refreshPollers();     // keep polling while the panel is open
+    }
+    $('rviz-toggle').addEventListener('click', () => setRviz(!rvizUI.open, false));
+    $('rviz-collapse').addEventListener('click', () => setRviz(true, !rvizUI.collapsed));
+    $('rviz-close').addEventListener('click', () => setRviz(false));
+    $('rviz-head').addEventListener('click', (e) => { if (!e.target.closest('button')) setRviz(true, !rvizUI.collapsed); });
+
+    function rvizUrl() {
+        const manual = $('rviz-url').value.trim();
+        if (manual) return { url: manual, team: run.team || '', time: null };
+        const want = ($('maps-team').value.trim() || run.team || '').toLowerCase();
+        const mine = rvizStreams.filter((x) => !want || x.team.toLowerCase() === want);
+        const latest = mine.sort((a, b) => b.time - a.time)[0];
+        return latest || null;
+    }
+
+    function renderLive() {
+        // only pull the MJPEG stream while the panel is open and expanded, it eats bandwidth
+        const img = $('rviz-stream');
+        const s = rvizUrl();
+        const on = rvizUI.open && !rvizUI.collapsed && !liveStopped && s;
+        const url = on ? s.url : '';
+        if (!url) {
+            if (img.getAttribute('src')) img.removeAttribute('src');
+            shownUrl = '';
+            liveState = '';
+        } else if (shownUrl !== url) {
+            shownUrl = url;
+            liveState = 'loading';
+            img.src = url;
+        }
+        img.hidden = !url || liveState === 'error';
+        $('rviz-empty').hidden = !img.hidden;
+        $('rviz-live-dot').hidden = liveState !== 'live';
+        $('rviz-empty-text').innerHTML = liveState === 'error'
+            ? 'Cannot open the stream.<br>Check the robot is still running <code>dojo_rviz_stream.py</code> and is on the same network.'
+            : liveStopped
+                ? 'Stream stopped.<br>Press <b>Resume</b> to watch again.'
+                : 'No RViz stream yet.<br>Press <b>Request</b> to ask the team.';
+        $('rviz-stop').textContent = liveStopped ? 'Resume' : 'Stop';
+        $('rviz-stop').disabled = !s;
+        $('rviz-toggle').classList.toggle('live', liveState === 'live');
+        $('rviz-meta').textContent = !s ? (rvizPending ? 'waiting for the robot…' : '—')
+            : `${s.team || 'manual url'} · RViz live` + (s.time ? ` · registered ${new Date(s.time * 1000).toLocaleTimeString()}` : '') +
+              (liveState === 'live' ? ' · streaming' : liveState === 'loading' ? ' · connecting…' : '');
+    }
+    $('rviz-stream').addEventListener('load', () => { liveState = 'live'; renderLive(); });
+    $('rviz-stream').addEventListener('error', () => { if ($('rviz-stream').getAttribute('src')) { liveState = 'error'; renderLive(); } });
+    $('rviz-url').addEventListener('change', () => { liveStopped = false; renderLive(); });
+    $('rviz-stop').addEventListener('click', () => { liveStopped = !liveStopped; renderLive(); });
 
     async function cancel(id) {
         try { await api(`/api/maps/request/${id}/cancel`, {}); } catch (e) { /* next poll shows state */ }
@@ -897,7 +822,7 @@ onRun(renderCriteria);
             const row = el('div', 'req req-' + r.status);
             let text = `${FORMAT_LABEL[r.format]} · ${r.team || 'any team'} · `;
             if (r.status === 'pending') text += `WAITING ${ago(r.age_s)}`;
-            else if (r.status === 'fulfilled') text += `received from ${r.answered_by}`;
+            else if (r.status === 'fulfilled') text += r.format === 'rviz_live' ? `streaming from ${r.answered_by}` : `received from ${r.answered_by}`;
             else if (r.status === 'failed') text += `FAILED (${r.answered_by}): ${r.message || 'no reason given'}`;
             else text += r.status;
             row.appendChild(el('span', '', text));
@@ -968,6 +893,16 @@ onRun(renderCriteria);
     }
 
     function render(s) {
+        rvizStreams = (s.streams || []).filter((x) => x.kind === 'rviz');
+        rvizPending = s.requests.some((r) => r.format === 'rviz_live' && r.status === 'pending');
+        const keys = new Set(rvizStreams.map((x) => `${x.team}|${x.url}|${x.time}`));
+        const newStream = knownStreams !== null && rvizStreams.find((x) => !knownStreams.has(`${x.team}|${x.url}|${x.time}`));
+        knownStreams = keys;
+        if (newStream) {
+            liveStopped = false;
+            setStatus(`RViz live from ${newStream.team}`);
+            setRviz(true, false);
+        }
         renderRequests(s.requests.filter((r) => r.format !== 'detection'));
         maps = s.maps.filter((m) => m.kind !== 'detection');
         const ids = new Set(maps.map((m) => m.id));
@@ -983,6 +918,7 @@ onRun(renderCriteria);
         const sig = maps.map((m) => m.id).join();
         if (sig !== historySig) { historySig = sig; renderHistory(); }
         renderViewer();
+        renderLive();
     }
 
     async function poll() {
@@ -994,59 +930,39 @@ onRun(renderCriteria);
     }
 
     let timer = null;
-    window.mapsStart = () => { if (!timer) { poll(); timer = setInterval(poll, 1000); } };
-    window.mapsStop = () => { clearInterval(timer); timer = null; };
+    window.mapsStart = () => { if (!timer) { poll(); timer = setInterval(poll, 1000); } renderLive(); };
+    window.mapsStop = () => { clearInterval(timer); timer = null; renderLive(); };
     window.mapsPrefill = () => { if (run.team) $('maps-team').value = run.team; };
+    setRviz(rvizUI.open, rvizUI.collapsed);
 })();
 
 // ======================================================================
-// FINAL SCORE
+// FINISH RUN
 // ======================================================================
 (function () {
-    function render() {
-        const tb = $('score-sheet').querySelector('tbody');
-        tb.replaceChildren();
-        SHEET.forEach(([label, g, max]) => {
-            const tr = el('tr');
-            const td = el('td', '', String(groupScore(g)));
-            td.appendChild(el('span', 'of', ` / ${max}`));
-            tr.append(el('td', '', label), td);
-            tb.appendChild(tr);
-        });
-        if (Number(run.penalty)) {
-            const tr = el('tr');
-            tr.append(el('td', '', 'Penalties'), el('td', '', `−${Number(run.penalty)}`));
-            tb.appendChild(tr);
-        }
-        $('score-total').textContent = String(totalScore());
-        if (document.activeElement !== $('penalty')) $('penalty').value = run.penalty || 0;
+    onRun(() => {
         if (document.activeElement !== $('run-notes')) $('run-notes').value = run.notes || '';
-    }
-    onRun(render);
+    });
 
-    $('penalty').addEventListener('input', () => { run.penalty = Math.max(0, Number($('penalty').value) || 0); saveRun(); });
     $('run-notes').addEventListener('input', () => { run.notes = $('run-notes').value; store.set('dojoRun', run); });
 
     $('finalize').addEventListener('click', async () => {
         if (!run.team) { toast('No team selected', 'Pick the team on the Home page.'); return; }
         if (run.running && !confirm('The timer is still running. Stop it and finalise?')) return;
         if (run.running) { run.elapsedMs = Date.now() - run.startedAt; run.running = false; run.stoppedMs = run.elapsedMs; }
-        const scores = {};
-        SHEET.forEach(([label, g]) => { scores[label] = groupScore(g); });
-        scores.Penalties = -(Number(run.penalty) || 0);
         try {
             const r = await api('/api/competition/runs', {
-                team: run.team, elapsed_ms: Math.round(run.elapsedMs), total: totalScore(), scores,
+                team: run.team, elapsed_ms: Math.round(run.elapsedMs), total: 0, scores: {},
                 displayed: run.displayed, detected: run.detected, notes: run.notes,
             });
             if (!r.success) throw new Error(r.message);
-            toast('Score saved', r.message);
+            toast('Run saved', r.message);
             run = newRun();
             saveRun();
             window.competitionRefresh();
             window.go('home');
         } catch (e) {
-            toast('Could not save the score', 'Check the web bridge is running, then try again.');
+            toast('Could not save the run', 'Check the web bridge is running, then try again.');
         }
     });
 })();
@@ -1074,8 +990,11 @@ onRun(renderCriteria);
         const t = team() || 'YOUR_TEAM';
         $('cmd').textContent =
             `curl -fsSL ${location.origin}/static/dojo_map.py -o dojo_map.py\n` +
-            `# answer map + detection requests and share the Pi camera:\n` +
-            `python3 dojo_map.py --server ${location.origin} --team "${t}" --watch --stream`;
+            `# answer map + detection requests:\n` +
+            `python3 dojo_map.py --server ${location.origin} --team "${t}" --watch\n\n` +
+            `curl -fsSL ${location.origin}/static/dojo_rviz_stream.py -o dojo_rviz_stream.py\n` +
+            `# start RViz first, then answer "RViz live" requests (streams the RViz window):\n` +
+            `python3 dojo_rviz_stream.py --server ${location.origin} --team "${t}" --watch`;
     }
 
     function updateSend() { $('send').disabled = !($('file').files[0] && team()); }
@@ -1091,9 +1010,10 @@ onRun(renderCriteria);
             if (!res.ok) { box.className = 'pending none'; box.textContent = data.detail || 'Not allowed'; }
             else if (!pending.length) { box.className = 'pending none'; box.textContent = 'No request right now.'; }
             else {
-                const r = pending[0], labels = { pgm: 'a PGM map', screenshot: 'an RViz screenshot', any: 'a map or RViz screenshot' };
+                const r = pending[0], labels = { pgm: 'a PGM map', screenshot: 'an RViz screenshot', any: 'a map or RViz screenshot',
+                                                 rviz_live: 'a live RViz stream (use the terminal command below)' };
                 box.className = 'pending wait';
-                box.textContent = `Judges want ${labels[r.format]} (${r.age_s}s ago)`;
+                box.textContent = `Judges want ${labels[r.format] || r.format} (${r.age_s}s ago)`;
             }
         } catch (e) { $('pending').textContent = 'Cannot reach the judges server'; }
     }
@@ -1143,9 +1063,9 @@ onRun(renderCriteria);
 // Pollers run while their section is visible; maps + dispenser also keep running
 // during a run so detections and loads are caught whichever section is open.
 (function () {
-    const SECTIONS = ['home', 'screen', 'loading', 'obstacles', 'navigation', 'maps'];
-    const NEXT = { screen: 'loading', loading: 'obstacles', obstacles: 'navigation' };
-    const NAMES = { loading: 'Loading Station', obstacles: 'Dynamic Obstacles', navigation: 'Navigation Judging' };
+    const SECTIONS = ['home', 'screen', 'loading', 'obstacles', 'maps'];
+    const NEXT = { screen: 'loading', loading: 'obstacles' };
+    const NAMES = { loading: 'Loading Station', obstacles: 'Dynamic Obstacles' };
     const sidebar = $('sidebar');
     const mobile = () => window.matchMedia('(max-width: 720px)').matches;
 
@@ -1174,12 +1094,13 @@ onRun(renderCriteria);
     function updatePollers() {
         const s = window.currentSection;
         const live = run.running;
-        if (s === 'screen' || s === 'maps' || live) window.mapsStart(); else window.mapsStop();
+        if (s === 'screen' || s === 'maps' || live || window.rvizPanelOpen) window.mapsStart(); else window.mapsStop();
         if (s === 'loading' || live) window.dispenserStart(); else window.dispenserStop();
         if (s === 'home') window.competitionStart(); else window.competitionStop();
         if (s === 'screen') window.screenStart(); else window.screenStop();
     }
     onRun(updatePollers);
+    window.refreshPollers = updatePollers;
 
     window.go = (name) => {
         if (!SECTIONS.includes(name)) name = 'home';
@@ -1199,7 +1120,7 @@ onRun(renderCriteria);
         run.done[sec] = true;
         saveRun();
         window.go(NEXT[sec]);
-        toast(`${NAMES[NEXT[sec]]}`, `Score so far: ${totalScore()} pts.`);
+        toast(`${NAMES[NEXT[sec]]}`, '');
     }));
 
     onRun(() => {
