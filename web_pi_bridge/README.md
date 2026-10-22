@@ -20,6 +20,9 @@ fi
 launch
 ```
 source ~/dojo_env.sh
+cd ~/ros2_ws
+colcon build --packages-select screen_interfaces && source install/setup.bash
+colcon build --packages-select web_pi_bridge --symlink-install && source install/setup.bash
 ros2 run web_pi_bridge fastapi_node
 ```
 On laptop open `http://localhost:8000`
