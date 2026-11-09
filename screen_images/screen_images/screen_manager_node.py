@@ -1,8 +1,7 @@
 import os
-import numpy as np
 import random
 import time
-from PIL import Image, ImageOps
+from PIL import Image
 
 import rclpy
 from rclpy.node import Node
@@ -12,6 +11,7 @@ from ament_index_python.packages import get_package_share_directory
 from example_interfaces.srv import SetBool
 from std_msgs.msg import String
 from screen_interfaces.srv import SetDisplayClass
+from screen_images.render import discover_classes, fit_to_screen, rgb565_bytes
 
 
 class ScreenManagerNode(Node):
@@ -24,20 +24,9 @@ class ScreenManagerNode(Node):
         pkg_share = get_package_share_directory('screen_images')
         self.logo_path = os.path.join(pkg_share, 'logos', 'icon.png')
 
-        # Discover categories dynamically: {'organic': [paths...], 'other': [...], 'plastic': [...]}
+        # Discover categories dynamically: {'organic': [paths...], 'metal': [...], 'plastic': [...]}
         test_images_root = os.path.join(pkg_share, 'test_images')
-        self.image_classes = {}
-        if os.path.isdir(test_images_root):
-            for entry in sorted(os.listdir(test_images_root)):
-                category_path = os.path.join(test_images_root, entry)
-                if os.path.isdir(category_path):
-                    files = [
-                        os.path.join(category_path, f)
-                        for f in sorted(os.listdir(category_path))
-                        if f.lower().endswith(('.png', '.jpg', '.jpeg'))
-                    ]
-                    if files:
-                        self.image_classes[entry] = files
+        self.image_classes = discover_classes(test_images_root)
 
         self.get_logger().info(f"Discovered image classes: { {k: len(v) for k, v in self.image_classes.items()} }")
 
@@ -74,15 +63,9 @@ class ScreenManagerNode(Node):
         try:
             img = Image.open(img_path).convert('RGB')
             
-            # Crop and scale to fill the screen while maintaining aspect ratio
-            img = ImageOps.fit(img, (self.width, self.height), centering=(0.5, 0.5))
-            
-            np_img = np.array(img, dtype=np.uint8)
-
-            r = (np_img[:, :, 0] >> 3).astype(np.uint16) << 11
-            g = (np_img[:, :, 1] >> 2).astype(np.uint16) << 5
-            b = (np_img[:, :, 2] >> 3).astype(np.uint16)
-            raw_565 = (r | g | b).astype('<u2').tobytes()
+            # Letterbox (no cropping) so the whole object stays visible to the robot camera
+            img = fit_to_screen(img, self.width, self.height)
+            raw_565 = rgb565_bytes(img)
 
             with open(self.fb_path, 'wb') as fb:
                 fb.write(raw_565)
