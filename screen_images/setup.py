@@ -4,7 +4,7 @@ from glob import glob
 
 package_name = 'screen_images'
 
-test_image_dirs = [d for d in glob('test_images/*') if os.path.isdir(d)]
+test_image_dirs = [d for d in glob('screen_images/test_images/*') if os.path.isdir(d)]
 
 setup(
     name=package_name,
