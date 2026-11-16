@@ -1,7 +1,8 @@
 import os
+import numpy as np
 import random
 import time
-from PIL import Image
+from PIL import Image, ImageOps
 
 import rclpy
 from rclpy.node import Node
@@ -11,10 +12,14 @@ from ament_index_python.packages import get_package_share_directory
 from example_interfaces.srv import SetBool
 from std_msgs.msg import String
 from screen_interfaces.srv import SetDisplayClass
-from screen_images.render import discover_classes, fit_to_screen, rgb565_bytes
 
 
 class ScreenManagerNode(Node):
+    # Colour of the bars around a picture that doesn't match the screen's shape.
+    #   None          -> use the picture's own edge colour (bars blend into the picture)
+    #   (r, g, b)     -> one fixed colour for every picture, e.g. (255, 255, 255) white or (0, 0, 0) black
+    PAD_COLOR = None
+
     def __init__(self):
         super().__init__('screen_manager_node')
 
@@ -26,7 +31,18 @@ class ScreenManagerNode(Node):
 
         # Discover categories dynamically: {'organic': [paths...], 'metal': [...], 'plastic': [...]}
         test_images_root = os.path.join(pkg_share, 'test_images')
-        self.image_classes = discover_classes(test_images_root)
+        self.image_classes = {}
+        if os.path.isdir(test_images_root):
+            for entry in sorted(os.listdir(test_images_root)):
+                category_path = os.path.join(test_images_root, entry)
+                if os.path.isdir(category_path):
+                    files = [
+                        os.path.join(category_path, f)
+                        for f in sorted(os.listdir(category_path))
+                        if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+                    ]
+                    if files:
+                        self.image_classes[entry] = files
 
         self.get_logger().info(f"Discovered image classes: { {k: len(v) for k, v in self.image_classes.items()} }")
 
@@ -56,16 +72,38 @@ class ScreenManagerNode(Node):
     def _get_fb_resolution(self):
         return 1024, 600
 
+    def _fit_to_screen(self, img):
+        """Scale the image to fit inside the screen without cropping or stretching.
+
+        Uses Lanczos resampling (sharpest for photos) and pads the leftover space with PAD_COLOR
+        (default: the image's own edge colour), so a square picture keeps its whole object visible.
+        """
+        img = ImageOps.exif_transpose(img).convert('RGB')      # honour camera/phone rotation
+        lanczos = getattr(Image, 'Resampling', Image).LANCZOS
+        img = ImageOps.contain(img, (self.width, self.height), method=lanczos)
+        a = np.asarray(img)
+        border = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
+        bg = self.PAD_COLOR or tuple(int(v) for v in np.median(border, axis=0))
+        canvas = Image.new('RGB', (self.width, self.height), bg)
+        canvas.paste(img, ((self.width - img.width) // 2, (self.height - img.height) // 2))
+        return canvas
+
+    @staticmethod
+    def _to_rgb565(img):
+        """RGB image -> little-endian RGB565 bytes for /dev/fb0 (rounded, not truncated, for better colour)."""
+        n = np.asarray(img, dtype=np.uint16)
+        r = ((n[:, :, 0] * 31 + 127) // 255) << 11
+        g = ((n[:, :, 1] * 63 + 127) // 255) << 5
+        b = (n[:, :, 2] * 31 + 127) // 255
+        return (r | g | b).astype('<u2').tobytes()
+
     def _write_to_framebuffer(self, img_path):
         if not os.path.exists(img_path):
             self.get_logger().error(f"Image path does not exist: {img_path}")
             return False
         try:
-            img = Image.open(img_path).convert('RGB')
-            
-            # Letterbox (no cropping) so the whole object stays visible to the robot camera
-            img = fit_to_screen(img, self.width, self.height)
-            raw_565 = rgb565_bytes(img)
+            img = self._fit_to_screen(Image.open(img_path))
+            raw_565 = self._to_rgb565(img)
 
             with open(self.fb_path, 'wb') as fb:
                 fb.write(raw_565)
